@@ -4,10 +4,9 @@ var cors = require("cors");
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var testAPIRouter = require("./routes/testApi")
-
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var APIRouter = require("./routes/api")
+require('dotenv').config();
+var session = require('express-session')
 
 var app = express();
 
@@ -18,13 +17,20 @@ app.set('view engine', 'jade');
 app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+var sess = {
+  secret: 'sdflksdklfjlkjklip',
+  cookie: {}
+}
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use("/testAPI", testAPIRouter);
+app.set('trust proxy', 1) // trust first proxy
+sess.cookie.secure = true // serve secure cookies
+
+
+app.use(session(sess))
+app.use("/api", APIRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
