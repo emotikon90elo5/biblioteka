@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var mysql = require("mysql")
 var BooksRouter = require("./apis/books")
+var AuthRouter = require("./apis/auth")
 require('dotenv').config();
 
 // var con = mysql.createConnection({
@@ -12,11 +13,11 @@ require('dotenv').config();
 //   });
 
 // con.connect()
-
 router.use("/books", BooksRouter);
-router.all("*", (req, res) =>{
-    res.statusCode = 404
-    res.json({succes: false, data:"Not found"})
+router.use("/auth", AuthRouter);
+router.all("*", (req, res) => {
+  res.statusCode = 404
+  res.json({ succes: false, data: "Not found" })
 })
 
 module.exports = router;
