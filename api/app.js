@@ -5,6 +5,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var APIRouter = require("./routes/api")
+var authRouter = require("./routes/auth")
 require('dotenv').config();
 var session = require('express-session')
 
@@ -28,7 +29,7 @@ app.use(session({
 }))
 app.use(cors());
 app.use("/api", APIRouter);
-
+app.use("/auth", authRouter);
 
 
 // catch 404 and forward to error handler
