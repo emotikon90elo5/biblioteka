@@ -5,6 +5,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var APIRouter = require("./routes/api")
+var mainRouter = require("./routes/main")
 require('dotenv').config();
 var session = require('express-session')
 
@@ -29,9 +30,10 @@ app.use(session({
 app.use(cors());
 app.use("/api", APIRouter);
 
-
+app.use("/", mainRouter);
 
 // catch 404 and forward to error handler
+
 app.all("*", (req, res ) =>{
     res.status(404).render("error") 
 });
