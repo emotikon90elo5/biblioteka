@@ -1,22 +1,20 @@
-:root {
-  --blue: rgb(50, 180, 210);
-  --dark-blue: rgb(20, 150, 180);
-  --black: rgb(0, 10, 30);
-  --hover-color: rgb(40, 50, 70);
-}
 
+.logged + .aligment {
+  top: 20px;
+}
 .logged {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 20px;
-  position: static;
+  position: fixed;
   background-color: var(--dark-blue);
 }
-.logged + .nav {
+.logged ~ .nav {
   top: 20px;
 }
+
 .nav {
   background-color: var(--blue);
   display: flex;
@@ -24,21 +22,31 @@
   transition-timing-function: cubic-bezier(0.68, 0, 0.265, 1.55);
   align-items: center;
   justify-content: space-evenly;
+  position: fixed;
 }
+.aligment {
+  width: 100%;
+  position: static;
+}
+
 @media screen and (width < 900px) {
   .nav {
-    position: static;
     width: 100vw;
-    height: 10vh;
+    height: max(100px, 10vh);
+  }
+  .aligment {
+    height: max(100px, 10vh);
   }
 }
 
 @media screen and (width > 900px) {
   .nav {
-    position: absolute;
     width: 10vw;
-    height: max(50px,5vh);
+    height: max(50px, 5vh);
     border-radius: 0 0 15px 15px;
+  }
+  .aligment {
+    height: max(50px, 5vh);
   }
   .nav > .link {
     display: none;
@@ -48,21 +56,22 @@
   }
   .nav:hover {
     width: 80vw;
-    height: max(100px,10vh);
+    height: max(100px, 10vh);
   }
-  .nav:not(:hover)::after {
+  .nav:not(:hover)::before {
     content: "";
     position: relative;
     width: 70%;
     height: 5px;
     border-radius: 2.5px;
     background-color: var(--black);
-    
   }
   .link:hover {
     color: var(--hover-color);
   }
-  .link::after {
+  .link::before {
+    bottom: -5px;
+    border-radius: 2.5px;
     position: absolute;
     content: "";
     width: 0%;
@@ -70,7 +79,7 @@
     transition: 0.1s;
     background-color: var(--black);
   }
-  .link:hover::after {
+  .link:hover::before {
     width: 100%;
   }
 }
@@ -78,10 +87,7 @@
   position: relative;
   text-decoration: none;
   color: var(--black);
-  font-size: 16px;
-  font-weight: 500;
   display: flex;
   align-items: baseline;
   justify-content: center;
 }
-

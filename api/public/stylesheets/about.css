@@ -1,0 +1,54 @@
+/* *{border: 1px solid black;} */
+.profile-wrapper{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+.profile-img{
+    width: 25vw;
+    padding: 5px;
+    border-radius: 20px;
+    
+}
+.right{
+    align-self: flex-end;
+    text-align: right;
+}
+.left{
+    align-self: flex-start;
+}
+.profile{
+    border-radius: 20px;
+    border: 5px solid black;
+    flex-wrap: wrap;
+    width: 30vw;
+    display: flex;
+    margin: 30px;
+    
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 5px;
+    box-shadow: 5px 20px 30px black;
+}
+.img-link{
+    width: 50px;
+    transition: 0.2s cubic-bezier(0.47, 0, 0.745, 0.715);
+}
+.img-link:hover{
+    filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));
+    scale: 1.1;
+}
+.about-links{
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.nick-name{
+    text-align: center;
+}
+.profile-text{
+    width: 20vw;
+}

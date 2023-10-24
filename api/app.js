@@ -7,6 +7,7 @@ var logger = require("morgan");
 var APIRouter = require("./routes/api");
 var authRouter = require("./routes/auth");
 var mainRouter = require("./routes/main");
+var aboutRouter = require("./routes/about");
 require("dotenv").config();
 var session = require("express-session");
 
@@ -34,6 +35,7 @@ app.use("/api", APIRouter);
 app.use("/auth", authRouter);
 
 app.use("/", mainRouter);
+app.use("/", aboutRouter);
 
 // catch 404 and forward to error handler
 

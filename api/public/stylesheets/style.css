@@ -1,14 +1,48 @@
-*{
+:root {
+  --blue: rgb(50, 180, 210);
+  --dark-blue: rgb(20, 150, 180);
+  --black: rgb(0, 10, 30);
+  --hover-color: rgb(40, 50, 70);
+}
+* {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
 }
 body {
-  
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   display: flex;
+  gap: 20px;
   flex-direction: column;
   align-items: center;
-  
   height: 200vh;
+  background-color: #aaa;
+}
+.text-big,
+.text-medium,
+.text-small,
+.text-big-bold,
+.text-giant {
+  color: var(--black);
+  text-decoration: none;
+}
+.text-giant {
+  font-size: 36px;
+  font-weight: 900;
+}
+.text-big-bold {
+  font-size: 24px;
+  font-weight: 900;
+}
+.text-big {
+  font-size: 24px;
+  font-weight: 500;
+}
+.text-medium {
+  font-size: 18px;
+  font-weight: 500;
+}
+.text-small {
+  font-size: 12px;
+  font-weight: 100;
 }
