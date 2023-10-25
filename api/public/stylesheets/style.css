@@ -1,8 +1,10 @@
 :root {
-  --blue: rgb(50, 180, 210);
+  --white2: #dadada;
   --dark-blue: rgb(20, 150, 180);
-  --black: rgb(0, 10, 30);
-  --hover-color: rgb(40, 50, 70);
+  --black: #111111;
+  --black-hover: #000;
+  --white-hover: #ffffff;
+  --white: #f5f5f5;
 }
 * {
   box-sizing: border-box;
@@ -16,33 +18,70 @@ body {
   flex-direction: column;
   align-items: center;
   height: 200vh;
-  background-color: #aaa;
+  background-color: var(--white);
 }
 .text-big,
 .text-medium,
 .text-small,
 .text-big-bold,
 .text-giant {
-  color: var(--black);
   text-decoration: none;
 }
 .text-giant {
-  font-size: 36px;
+  font-size: 4rem;
   font-weight: 900;
 }
 .text-big-bold {
-  font-size: 24px;
+  font-size: 3rem;
   font-weight: 900;
 }
 .text-big {
-  font-size: 24px;
+  font-size: 1.7rem;
   font-weight: 500;
 }
 .text-medium {
-  font-size: 18px;
+  font-size: 1.2rem;
   font-weight: 500;
 }
+
 .text-small {
-  font-size: 12px;
+  font-size: 1rem;
   font-weight: 100;
+}
+
+@media screen and (width < 800px) {
+  .text-giant {
+    font-size: 3rem;
+  }
+  .text-big-bold {
+    font-size: 2.5rem;
+  }
+  .text-big {
+    font-size: 1.7rem;
+  }
+  .text-medium {
+    font-size: 1.3rem;
+  }
+  
+  .text-small {
+    font-size: 1rem;
+  }
+}
+@media screen and (width < 600px) {
+  .text-giant {
+    font-size: 3rem;
+  }
+  .text-big-bold {
+    font-size: 2.5rem;
+  }
+  .text-big {
+    font-size: 1rem;
+  }
+  .text-medium {
+    font-size: .8rem;
+  }
+  
+  .text-small {
+    font-size: .7rem;
+  }
 }

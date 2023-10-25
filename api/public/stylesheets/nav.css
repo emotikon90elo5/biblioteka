@@ -9,14 +9,14 @@
   width: 100%;
   height: 20px;
   position: fixed;
-  background-color: var(--dark-blue);
+  background-color: var(--black);
 }
 .logged ~ .nav {
   top: 20px;
 }
 
 .nav {
-  background-color: var(--blue);
+  background-color: var(--black);
   display: flex;
   transition: 0.2s;
   transition-timing-function: cubic-bezier(0.68, 0, 0.265, 1.55);
@@ -25,6 +25,7 @@
   position: fixed;
 }
 .aligment {
+  height: max(120px, 10vh);
   width: 100%;
   position: static;
 }
@@ -35,7 +36,7 @@
     height: max(100px, 10vh);
   }
   .aligment {
-    height: max(100px, 10vh);
+    height: max(120px, 10vh);
   }
 }
 
@@ -46,28 +47,28 @@
     border-radius: 0 0 15px 15px;
   }
   .aligment {
-    height: max(50px, 5vh);
+    height: max(80px, 5vh);
   }
   .nav > .link {
     display: none;
   }
-  .nav:hover > .link {
+  .nav> .link {
     display: flex;
   }
-  .nav:hover {
+  .nav{
     width: 80vw;
     height: max(100px, 10vh);
   }
-  .nav:not(:hover)::before {
+  /* .nav:not(:hover)::before {
     content: "";
     position: relative;
     width: 70%;
     height: 5px;
     border-radius: 2.5px;
     background-color: var(--black);
-  }
+  } */
   .link:hover {
-    color: var(--hover-color);
+    color: var(--white-hover);
   }
   .link::before {
     bottom: -5px;
@@ -75,9 +76,9 @@
     position: absolute;
     content: "";
     width: 0%;
-    height: 5px;
+    height: 1px;
     transition: 0.1s;
-    background-color: var(--black);
+    background-color: var(--white-hover);
   }
   .link:hover::before {
     width: 100%;
@@ -86,8 +87,38 @@
 .link {
   position: relative;
   text-decoration: none;
-  color: var(--black);
+  color: var(--white2);
   display: flex;
   align-items: baseline;
   justify-content: center;
+}
+.button-link{
+  background-color: var(--white2);
+  padding: 16px;
+  border-radius: 5px;
+
+}
+.button-link a{
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  color: var(--black);
+  text-decoration: none;
+}
+.button-link:hover a{
+  color: var(--black-hover);
+}
+.button-link a::before {
+  bottom: -5px;
+  border-radius: 2.5px;
+  position: absolute;
+  content: "";
+  width: 0%;
+  height: 1px;
+  transition: 0.1s;
+  background-color: var(--black-hover);
+}
+.button-link:hover a::before {
+  width: 100%;
 }
