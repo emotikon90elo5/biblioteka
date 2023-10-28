@@ -1,14 +1,14 @@
-var express = require("express");
-var router = express.Router();
-var mysql = require("mysql");
-var sha512 = require("js-sha512").sha512;
+const express = require("express");
+const router = express.Router();
+const mysql = require("mysql");
+const sha512 = require("js-sha512").sha512;
 require("dotenv").config();
 
-var con = mysql.createConnection({
-  host: process.env.MYSQLhost,
-  user: process.env.MYSQLuser,
-  password: process.env.MYSQLpassword,
-  database: process.env.MYSQLdatabase,
+const con = mysql.createConnection({
+    host: process.env.MYSQLhost,
+    user: process.env.MYSQLuser,
+    password: process.env.MYSQLpassword,
+    database: process.env.MYSQLdatabase,
 });
 
 con.connect();
@@ -16,44 +16,29 @@ con.connect();
 router.use(express.json());
 
 router.post("/login", (req, res) => {
-  if (!req.body.username  && !req.body.password) {
-    return res.render("auth/login", {
-      error: "Nie podałeś nazwy użytkownika i hasła",
-    });
-  } else if (!req.body.username) {
-    return res.render("auth/login", { error: "Nie podałeś nazwy użytkownika" });
-  } else if (!req.body.password) {
-    return res.render("auth/login", { error: "Nie podałeś hasła" });
-  }
-
-  con.query(
-    `SELECT * FROM Accounts WHERE Login = "${sha512(req.body.username)}"`,
-    (err, rows, fields) => {
-      if (err) throw err;
-      if (!rows[0])
-        return res.render("auth/login", {
-          error: "Podałeś złe dane bądź konto nie istnieje",
-        });
-      if (
-        sha512.hmac("963852741pol" + rows[0].ID + 1, req.body.password) ==
-        rows[0].Pass
-      ) {
-        req.session.UserID = rows[0].ID;
-        req.session.SchoolID = rows[0].School_ID;
-        req.session.save();
-        res.redirect("/");
-      } else {
-        return res.render("auth/login", {
-          error: "Podałeś złe dane bądź konto nie istnieje",
-        });
-      }
+    const { password, username } = req.body
+    if(req.session.UserID) return res.redirect("/admin");
+    if (!username || !password) {
+        return res.render("auth/login", { error: "Nie podałeś nazwy użytkownika i/lub hasła", });
     }
-  );
+    con.query(`SELECT * FROM Accounts WHERE Login = "${sha512(username)}"`, (err, rows, fields) => {
+        if (err) throw err;
+        if (!rows[0]) return res.render("auth/login", { error: "Podałeś złe dane bądź konto nie istnieje" });
+        if (sha512.hmac("963852741pol" + rows[0].ID + 1, password) == rows[0].Pass) {
+            req.session.UserID = rows[0].ID;
+            req.session.SchoolID = rows[0].School_ID;
+            req.session.save();
+            res.redirect("/admin");
+        } else {
+            return res.render("auth/login", { error: "Podałeś złe dane bądź konto nie istnieje", });
+        }
+    }
+    );
 });
 
 router.get("/logout", (req, res) => {
-  req.session.destroy();
-  res.redirect("/auth");
+    req.session.destroy();
+    res.redirect("/auth");
 });
 
 module.exports = router;

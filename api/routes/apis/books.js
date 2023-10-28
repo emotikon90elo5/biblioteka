@@ -14,50 +14,40 @@ con.connect()
 
 router.use(express.json());
 
+const specialChars = /['"`]/g
+const notNumbers = /\D/g
+
 //Get By ID
-router.get("/Book/:id", (req, res) => {
+router.get("/Book/:id", ({ params: { id } }, res) => {
 
-  con.query(`SELECT * FROM Books WHERE ID = "${req.params.id}"`, (err, rows, fields) => {
+  con.query(`SELECT * FROM Books WHERE ID = "${id.replace(notNumbers, "")}"`, (err, rows, fields) => {
     if (err) throw err
-
+    if (!rows[0]) return res.json({ succes: false })
     res.json({ succes: true, data: rows[0] })
   })
 
 })
-router.get("/Shelve/:id", (req, res) => {
+router.get("/Shelf/:id", ({ params: { id } }, res) => {
 
-  con.query(`SELECT * FROM Books WHERE Shelves_ID = "${req.params.id}"`, (err, rows, fields) => {
+  con.query(`SELECT * FROM Books WHERE Shelves_ID = "${id.replace(notNumbers, "")}"`, (err, rows, fields) => {
     if (err) throw err
 
     res.json({ succes: true, data: rows })
   })
 
 })
-router.get("/Bookcase/:id", (req, res) => {
+router.get("/Bookcase/:id", ({ params: { id } }, res) => {
 
-  con.query(`SELECT * FROM Books INNER JOIN Shelves ON Shelves_ID = Shelves.ID WHERE Shelves.Bookcase_ID="${req.params.id}"`, (err, rows, fields) => {
+  con.query(`SELECT * FROM Books INNER JOIN Shelves ON Shelves_ID = Shelves.ID WHERE Shelves.Bookcase_ID="${id.replace(notNumbers, "")}"`, (err, rows, fields) => {
     if (err) throw err
 
     res.json({ succes: true, data: rows })
   })
 
 })
-router.get("/School/:id", (req, res) => {
+router.get("/School/:id", ({ params: { id } }, res) => {
 
-  con.query(`SELECT * FROM Books INNER JOIN Shelves ON Shelves_ID = Shelves.ID INNER JOIN Bookcases ON Bookcases.ID = Shelves.Bookcase_ID  WHERE Bookcases.School_ID="${req.params.id}"`, (err, rows, fields) => {
-    if (err) throw err
-
-    res.json({ succes: true, data: rows })
-  })
-
-})
-
-router.get("/School/", (req, res) => {
-  console.log(req.session)
-  if (req.session.SchoolID == undefined) {
-    return res.json({ succes: false, data: "Bad auth" })
-  }
-  con.query(`SELECT * FROM Books INNER JOIN Shelves ON Shelves_ID = Shelves.ID INNER JOIN Bookcases ON Bookcases.ID = Shelves.Bookcase_ID  WHERE Bookcases.School_ID="${req.session.SchoolID}"`, (err, rows, fields) => {
+  con.query(`SELECT * FROM Books INNER JOIN Shelves ON Shelves_ID = Shelves.ID INNER JOIN Bookcases ON Bookcases.ID = Shelves.Bookcase_ID  WHERE Bookcases.School_ID="${id.replace(notNumbers, "")}"`, (err, rows, fields) => {
     if (err) throw err
 
     res.json({ succes: true, data: rows })
@@ -65,30 +55,16 @@ router.get("/School/", (req, res) => {
 
 })
 
-router.get("/find/School/:id", (req, res) => {
+router.get("/find/School/:id", ({ params: { id }, query: { title, author, publishinghouse, agecategory } }, res) => {
 
   con.query(`SELECT * FROM Books ` +
     `INNER JOIN Shelves ON Shelves_ID = Shelves.ID ` +
     `INNER JOIN Bookcases ON Bookcases.ID = Shelves.Bookcase_ID ` +
-    `WHERE Bookcases.School_ID="${req.params.id}" ` +
-    `AND Title LIKE "${req.query.title ? req.query.title : ""}%" ` +
-    `AND Author LIKE "${req.query.author ? req.query.author : ""}%" ` +
-    `AND PublishingHouse LIKE "${req.query.publishinghouse ? req.query.publishinghouse : ""}%" ` +
-    `AND AgeCategory LIKE "${req.query.agecategory ? req.query.agecategory : ""}%";`, (err, rows, fields) => {
-      if (err) throw err
-
-      res.json({ succes: true, data: rows })
-    })
-})
-router.get("/find/School/", (req, res) => {
-  con.query(`SELECT * FROM Books ` +
-    `INNER JOIN Shelves ON Shelves_ID = Shelves.ID ` +
-    `INNER JOIN Bookcases ON Bookcases.ID = Shelves.Bookcase_ID ` +
-    `WHERE Bookcases.School_ID="${req.session.SchoolID}" ` +
-    `AND Title LIKE "${req.query.title ? req.query.title : ""}%" ` +
-    `AND Author LIKE "${req.query.author ? req.query.author : ""}%" ` +
-    `AND PublishingHouse LIKE "${req.query.publishinghouse ? req.query.publishinghouse : ""}%" ` +
-    `AND AgeCategory LIKE "${req.query.agecategory ? req.query.agecategory : ""}%";`, (err, rows, fields) => {
+    `WHERE Bookcases.School_ID="${id.replace(notNumbers, "")}" ` +
+    `AND Title LIKE "${title ? title.replace(specialChars, "") : ""}%" ` +
+    `AND Author LIKE "${author ? author.replace(specialChars, "") : ""}%" ` +
+    `AND PublishingHouse LIKE "${publishinghouse ? publishinghouse.replace(specialChars, "") : ""}%" ` +
+    `AND AgeCategory LIKE "${agecategory ? agecategory.replace(specialChars, "") : ""}%";`, (err, rows, fields) => {
       if (err) throw err
 
       res.json({ succes: true, data: rows })

@@ -1,11 +1,10 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 require('dotenv').config();
 
-
 router.get("/", (req, res) => {
-    if(req.session.UserID==undefined) return res.render("auth/login", {error: ""})
-    else return res.render("auth/logged");
+    if(!req.session.UserID) return res.render("auth/login", {error: ""})
+    return res.redirect("/admin");
 })
 
 module.exports = router;

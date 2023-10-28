@@ -10,12 +10,12 @@ var con = mysql.createConnection({
   database: process.env.MYSQLdatabase
 });
 
-router.get("/",  (req, res) => {
-  res.render("main")
+router.get("/",  ({session: {SchoolID}}, res) => {
+  res.render("main", {logged: SchoolID ? true : false })
 })
 
-router.get("/about", (req, res) => {
-  res.render("about")
+router.get("/about", ({session: {SchoolID}}, res) => {
+  res.render("about", {logged: SchoolID ? true : false })
   
 })
 module.exports = router;
