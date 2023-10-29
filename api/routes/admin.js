@@ -7,8 +7,11 @@ router.get("/", (req, res) => {
 })
 
 router.get("/rent", (req, res) => {
-    res.render("admin/rent", {SchoolID: req.session.SchoolID})
+    res.render("admin/rent")
 })
 
+router.get("/addBook", (req, res) => {
+    res.render("admin/addBook")
+})
 
 module.exports = router;
