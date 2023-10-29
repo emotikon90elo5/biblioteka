@@ -1,16 +1,17 @@
-var createError = require("http-errors");
-var express = require("express");
-var cors = require("cors");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
-var APIRouter = require("./routes/api");
-var authRouter = require("./routes/auth");
-var mainRouter = require("./routes/main");
+const createError = require("http-errors");
+const express = require("express");
+const cors = require("cors");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
+const APIRouter = require("./routes/api");
+const authRouter = require("./routes/auth");
+const adminRouter = require("./routes/admin");
+const mainRouter = require("./routes/main");
 require("dotenv").config();
-var session = require("express-session");
+const session = require("express-session");
 
-var app = express();
+const app = express();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -26,12 +27,16 @@ app.use(
     secret: "keyboard cat",
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 60000, secure: false },
+    cookie: { maxAge: 24 * 60 * 60 * 1000, secure: false },
   })
 );
 app.use(cors());
 app.use("/api", APIRouter);
 app.use("/auth", authRouter);
+app.use("/admin", (req, res, next) => {
+  if (!req.session.SchoolID) return res.redirect("/auth")
+  next()
+}, adminRouter);
 
 app.use("/", mainRouter);
 

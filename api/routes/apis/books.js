@@ -71,4 +71,9 @@ router.get("/find/School/:id", ({ params: { id }, query: { title, author, publis
     })
 })
 
+router.post('/rent', (req, res)=>{
+  if(!req.session.SchoolID) res.json({ succes: false })
+
+})
+
 module.exports = router;
