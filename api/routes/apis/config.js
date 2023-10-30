@@ -43,5 +43,22 @@ router.get("/shelf", ({ session: { SchoolID } }, res) => {
   })
 
 })
+router.get("/bookcase", ({ session: { SchoolID } }, res) => {
 
+  con.query(`SELECT ID,Name FROM Bookcases WHERE School_ID = "${SchoolID}";`, (err, rows, fields) => {
+    if (err) throw err
+    if (!rows[0]) return res.json({ succes: false })
+    return res.json({ succes: true, data: rows })
+  })
+
+})
+router.get("/books", ({ session: { SchoolID } }, res) => {
+
+  con.query(`SELECT Books.ID AS ID, Books.Shelves_ID AS Shelves_ID, Books.Title AS Title, Books.Author as Author, Books.PublishingHouse AS PublishingHouse, Books.AgeCategory as AgeCategory, Books.Type_ID as Type_ID, Books.LocalID AS LocalID FROM Books INNER JOIN Shelves INNER join Bookcases ON Books.Shelves_ID = Shelves.ID AND Shelves.Bookcase_ID = Bookcases.ID WHERE Bookcases.School_ID = "${SchoolID}";`, (err, rows, fields) => {
+    if (err) throw err
+    if (!rows[0]) return res.json({ succes: false })
+    return res.json({ succes: true, data: rows })
+  })
+
+})
 module.exports = router;
