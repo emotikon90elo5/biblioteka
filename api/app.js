@@ -46,7 +46,6 @@ app.all("*", (req, res) => {
   res.status(404).render("error");
 });
 
-// error handler
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
@@ -54,7 +53,7 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error");
+  res.render("error",{status: err.status, message: err.message});
 });
 
 module.exports = app;
