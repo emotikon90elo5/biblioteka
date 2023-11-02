@@ -24,7 +24,7 @@ router.use("/config", (req, res, next)=>{
 router.use("/manage", (req, res, next)=>{
   if(!req.session.SchoolID) return res.redirect('/auth')
   next()
-}, ManageRouter);
+}, ManageRouter.router);
 router.all("*", (req, res) => {
   res.statusCode = 404
   res.json({ succes: false, data: "Not found" })
