@@ -19,7 +19,7 @@ router.use(express.json());
 router.post("/rent", async ({ session: { SchoolID }, body }, res) => {
   const { localID, firstname, lastname, classID } = body;
   if (typeof localID == "undefined" || typeof firstname == "undefined" || typeof lastname == "undefined" || typeof classID == "undefined") return redirectWithText(res, 'Nie podałeś pełnych danych', getOldValue(Object.assign(body, { type: "err" })));
-  let rented = await isRented(localID.replace(notNumbers, ""), schoolID)
+  let rented = await isRented(localID.replace(notNumbers, ""), SchoolID)
   if (rented == "dberr") return redirectWithText(res, 'Błąd połączenia, spróbuj ponownie później', getOldValue(Object.assign(body, { type: "err" })));
   else if (rented == "bookNotExist") return redirectWithText(res, 'Taki numer książki nie istnieje', getOldValue(Object.assign(body, { type: "err" })));
   else if (rented) return redirectWithText(res, 'Ta książka jest już wyporzyczona', getOldValue(Object.assign(body, { type: "err" })));

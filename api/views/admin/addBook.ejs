@@ -28,7 +28,7 @@
         </div>
         <!-- Sidebar navigation-->
         <%- include("sideBarNav") -%>
-        <!-- End Sidebar navigation -->
+          <!-- End Sidebar navigation -->
       </div>
       <!-- End Sidebar scroll-->
     </aside>
@@ -60,33 +60,37 @@
               <h5 class="card-title fw-semibold mb-4">Dodaj książkę</h5>
               <div class="card">
                 <div class="card-body">
-                  <form action="/api/books/rent">
+                  <form action="/api/manage/addBook" method="post">
                     <div class="mb-3">
                       <label for="title" class="form-label">Tytuł</label>
-                        <input type="text" class="form-control" id="title" name="title">
+                      <input type="text" class="form-control" id="title" name="title">
                     </div>
                     <div class="mb-3">
                       <label for="author" class="form-label">Autor</label>
-                      <input type="text" class="form-control" id="author" name="author"> 
+                      <input type="text" class="form-control" id="author" name="author">
                     </div>
                     <div class="mb-3">
                       <label for="publishingHouse" class="form-label">Wydawca</label>
-                      <input type="text" class="form-control" id="publishingHouse" name="publishingHouse"> 
+                      <input type="text" class="form-control" id="publishingHouse" name="publishingHouse">
                     </div>
                     <div class="mb-3">
                       <label for="ageCategory" class="form-label">Kategoria wiekowa</label>
-                      <input type="number" class="form-control" id="ageCategory" name="ageCategory"> 
+                      <input type="number" class="form-control" id="ageCategory" name="ageCategory">
                     </div>
                     <div class="mb-3">
-                        <label for="type" class="form-label">Typ książki</label>
-                        <select id="type" name="type" class="form-control">
-                        </select>
-                      </div>
-                      <div class="mb-3">
-                        <label for="shelf" class="form-label">Półka</label>
-                        <select id="shelf" name="shelf" class="form-control">
-                        </select>
-                      </div>
+                      <label for="type" class="form-label">Typ książki</label>
+                      <select id="type" name="type" class="form-control">
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="shelf" class="form-label">Półka</label>
+                      <select id="shelf" name="shelf" class="form-control">
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="localID" class="form-label">Kod Książki</label>
+                      <input type="number" class="form-control" id="localID" name="localID">
+                    </div>
                     <button type="submit" class="btn btn-primary">Dodaj</button>
                   </form>
                 </div>
