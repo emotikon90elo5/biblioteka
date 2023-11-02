@@ -19,7 +19,7 @@ router.use(express.json());
 router.post("/rent", async ({ session: { SchoolID }, body }, res) => {
   const { localID, firstname, lastname, classID } = body;
   if (typeof localID == "undefined" || typeof firstname == "undefined" || typeof lastname == "undefined" || typeof classID == "undefined") return redirectWithText(res, 'Nie podałeś pełnych danych', getOldValue(Object.assign(body, { type: "err" })));
-  let rented = await getRented(localID.replace(notNumbers, ""))
+  let rented = await isRented(localID.replace(notNumbers, ""), schoolID)
   if (rented == "dberr") return redirectWithText(res, 'Błąd połączenia, spróbuj ponownie później', getOldValue(Object.assign(body, { type: "err" })));
   else if (rented == "bookNotExist") return redirectWithText(res, 'Taki numer książki nie istnieje', getOldValue(Object.assign(body, { type: "err" })));
   else if (rented) return redirectWithText(res, 'Ta książka jest już wyporzyczona', getOldValue(Object.assign(body, { type: "err" })));
@@ -31,10 +31,13 @@ router.post("/rent", async ({ session: { SchoolID }, body }, res) => {
     return redirectWithText(res, 'Pomyślnie wyporzyczono', "&type=succes");
   }
 })
+
 //getRent
-const getRented = (localID) => {
+const isRented = (localID, schoolID) => {
   return new Promise((res) => {
-    con.query(`SELECT Rented FROM Books INNER JOIN Rents ON Book_ID=Books.ID WHERE LocalID="${localID}"; `, (err, rows, fields) => {
+    con.query(`SELECT Rented FROM Books INNER JOIN Rents ON Book_ID=Books.ID INNER JOIN Shelves ON Books.Shelves_ID=Shelves.ID 
+    INNER JOIN Bookcases ON Shelves.Bookcase_ID = Bookcases.ID 
+    WHERE Bookcases.School_ID=${schoolID} AND LocalID="${localID}"; `, (err, rows, fields) => {
       if (err) return res("dberr")
       if (!rows[0]) return res("bookNotExist")
       rows.forEach(element => {
