@@ -9,7 +9,6 @@ let con = mysql.createConnection({
   password: process.env.MYSQLpassword,
   database: process.env.MYSQLdatabase
 });
-
 con.connect()
 
 const specialChars = /['"`]/g
@@ -17,20 +16,21 @@ const notNumbers = /\D/g
 
 router.use(express.json());
 
-router.post("/rent", async ({ session: { SchoolID }, body: { localID, firstname, lastname, classID } }, res) => {
+router.post("/rent", async ({ session: { SchoolID }, body }, res) => {
+  const { localID, firstname, lastname, classID } = body;
+  if (typeof localID == "undefined" || typeof firstname == "undefined" || typeof lastname == "undefined" || typeof classID == "undefined") return redirectWithText(res, 'Nie podałeś pełnych danych', getOldValue(Object.assign(body, { type: "err" })));
   let rented = await getRented(localID.replace(notNumbers, ""))
-  if (rented == "dberr") return redirectWithText(res, 'Błąd połączenia, spróbuj ponownie później', getOldValue(localID, firstname, lastname, classID));
-  else if (rented == "bookNotExist") return redirectWithText(res, 'Taki numer książki nie istnieje', getOldValue(localID, firstname, lastname, classID));
-  else if (rented) return redirectWithText(res, 'Ta książka jest już wyporzyczona', getOldValue(localID, firstname, lastname, classID));
+  if (rented == "dberr") return redirectWithText(res, 'Błąd połączenia, spróbuj ponownie później', getOldValue(Object.assign(body, { type: "err" })));
+  else if (rented == "bookNotExist") return redirectWithText(res, 'Taki numer książki nie istnieje', getOldValue(Object.assign(body, { type: "err" })));
+  else if (rented) return redirectWithText(res, 'Ta książka jest już wyporzyczona', getOldValue(Object.assign(body, { type: "err" })));
   else {
     let rentValue = await rent(localID, firstname, lastname, classID, SchoolID)
-    if (rentValue == "bookNotExist") return redirectWithText(res, 'Taki numer książki nie istnieje', getOldValue(localID, firstname, lastname, classID));
-    else if (rentValue == "pupilNotExist") return redirectWithText(res, 'Taki uczeń nie istnieje', getOldValue(localID, firstname, lastname, classID));
-    else if (rentValue == "dberr") return redirectWithText(res, 'Błąd połączenia, spróbuj ponownie później', getOldValue(localID, firstname, lastname, classID));
+    if (rentValue == "bookNotExist") return redirectWithText(res, 'Taki numer książki nie istnieje', getOldValue(Object.assign(body, { type: "err" })));
+    else if (rentValue == "pupilNotExist") return redirectWithText(res, 'Taki uczeń nie istnieje', getOldValue(Object.assign(body, { type: "err" })));
+    else if (rentValue == "dberr") return redirectWithText(res, 'Błąd połączenia, spróbuj ponownie później', getOldValue(Object.assign(body, { type: "err" })));
     return redirectWithText(res, 'Pomyślnie wyporzyczono', "&type=succes");
   }
 })
-
 //getRent
 const getRented = (localID) => {
   return new Promise((res) => {
@@ -87,8 +87,12 @@ const getBookID = (schoolID, localID) => {
   })
 }
 
-const getOldValue = (localID, firstname, lastname, classID) => {
-  return (localID ? "&localID=" + localID : "") + (firstname ? "&firstname=" + firstname : "") + (lastname ? "&lastname=" + lastname : "") + (classID ? "&classID=" + classID : "") + "&type=err"
+const getOldValue = (values) => {
+  let str = "";
+  Object.entries(values).forEach((v) => {
+    if (typeof v[1] != "undefined" && v[1] != "") str += "&" + v[0] + "=" + v[1]
+  })
+  return str;
 }
 
 const redirectWithText = (res, message, args) => {
