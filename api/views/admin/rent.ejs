@@ -8,6 +8,16 @@
   <link rel="shortcut icon" type="image/png" href="/imgs/logo.png" />
   <link rel="stylesheet" href="/assets/css/styles.min.css" />
   <script src="/assets/js/classes.js" defer></script>
+  <% if (typeof classID !='undefined' ) { %>
+    <script defer>
+      let selected = <%=classID%>
+    </script>
+    <% } else{%>
+      <script defer>
+        let selected = -1
+      </script>
+    <%}%>
+
 </head>
 
 <body>
@@ -28,7 +38,7 @@
         </div>
         <!-- Sidebar navigation-->
         <%- include("sideBarNav") -%>
-        <!-- End Sidebar navigation -->
+          <!-- End Sidebar navigation -->
       </div>
       <!-- End Sidebar scroll-->
     </aside>
@@ -60,24 +70,37 @@
               <h5 class="card-title fw-semibold mb-4">Wyporzycz</h5>
               <div class="card">
                 <div class="card-body">
-                  <form action="/api/books/rent">
+                  <% if (typeof message != "undefined" && typeof type != "undefined") { %>
+                    <% if (type == "err") { %>
+                      <div class="alert alert-danger" role="alert">
+                        <%=message%>
+                      </div>
+                    <% } else {%>
+                      <div class="alert alert-success" role="alert">
+                        <%=message%>
+                      </div>
+                  <% }} %>
+                  <form action="/api/manage/rent" method="post">
                     <div class="mb-3">
-                      <label for="class" class="form-label">Klasa</label>
-                      <select id="class" name="class" class="form-control">
+                      <label for="classID" class="form-label">Klasa</label>
+                      <select id="classID" name="classID" class="form-control">
                       </select>
                       <div id="classHelp" class="form-text">Wybierz, z której klasy jest uczeń</div>
                     </div>
                     <div class="mb-3">
                       <label for="firstname" class="form-label">Imię</label>
-                      <input type="text" class="form-control" id="firstname" name="firstname"> 
+                      <input type="text" class="form-control" id="firstname" name="firstname"
+                        value="<%=typeof firstname != 'undefined'?firstname:""%>">
                     </div>
                     <div class="mb-3">
                       <label for="lastname" class="form-label">Nazwisko</label>
-                      <input type="text" class="form-control" id="lastname" name="lastname"> 
+                      <input type="text" class="form-control" id="lastname" name="lastname"
+                        value="<%=typeof lastname != 'undefined'?lastname:""%>">
                     </div>
                     <div class="mb-3">
                       <label for="localID" class="form-label">Number w książce</label>
-                      <input type="number" class="form-control" id="localID" name="localID"> 
+                      <input type="number" class="form-control" id="localID" name="localID"
+                        value="<%=typeof localID != 'undefined'?localID:""%>">
                     </div>
                     <button type="submit" class="btn btn-primary">Wyporzycz</button>
                   </form>
