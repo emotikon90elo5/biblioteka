@@ -22,7 +22,10 @@ router.get("/addBookCase", (req, res) => {
 router.get("/addClass", (req, res) => {
     res.render("admin/addClass")
 })
-router.get("/updateBook", (req, res) => {
-    res.render("admin/updateBook")
+router.get("/book", (req, res) => {
+    res.redirect("/admin/book/1")
+})
+router.get("/book/:page", (req, res) => {
+    res.render("admin/updateBook",{page:req.params.page})
 })
 module.exports = router;
