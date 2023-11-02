@@ -1,39 +1,30 @@
 const express = require("express");
 const router = express.Router();
-const mysql = require("mysql");
 const sha512 = require("js-sha512").sha512;
-require("dotenv").config();
+const { PrismaClient } = require('@prisma/client');
 
-const con = mysql.createConnection({
-    host: process.env.MYSQLhost,
-    user: process.env.MYSQLuser,
-    password: process.env.MYSQLpassword,
-    database: process.env.MYSQLdatabase,
-});
-
-con.connect();
+const prisma = new PrismaClient()
 
 router.use(express.json());
 
-router.post("/login", (req, res) => {
+router.post("/login", async (req, res) => {
     const { password, username } = req.body
-    if(req.session.UserID) return res.redirect("/admin");
+    if (req.session.UserID) return res.redirect("/admin");
     if (!username || !password) {
         return res.redirect("/auth?error=Nie podałeś nazwy użytkownika i/lub hasła");
     }
-    con.query(`SELECT * FROM Accounts WHERE Login = "${sha512(username)}"`, (err, rows, fields) => {
-        if (err) throw err;
-        if (!rows[0]) return res.redirect("/auth?error=Podałeś złe dane bądź konto nie istnieje");
-        if (sha512.hmac("963852741pol" + rows[0].ID + 1, password) == rows[0].Pass) {
-            req.session.UserID = rows[0].ID;
-            req.session.SchoolID = rows[0].School_ID;
-            req.session.save();
-            res.redirect("/admin");
-        } else {
-            return res.redirect("/auth?error=Podałeś złe dane bądź konto nie istnieje")
-        }
+    const user = await prisma.accounts.findFirstOrThrow({
+        where: { Login: sha512(username) },
+    })
+    if (user==null) return res.redirect("/auth?error=Podałeś złe dane bądź konto nie istnieje");
+    if (sha512.hmac("963852741pol" + user.ID + 1, password) == user.Pass) {
+        req.session.UserID = user.ID;
+        req.session.SchoolID = user.School_ID;
+        req.session.save();
+        res.redirect("/admin");
+    } else {
+        return res.redirect("/auth?error=Podałeś złe dane bądź konto nie istnieje2")
     }
-    );
 });
 
 router.get("/logout", (req, res) => {
