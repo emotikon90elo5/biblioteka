@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Accounts {
+  ID          Int    @id @default(autoincrement())
+  Login       String @db.Text
+  Pass        String @db.Text
+  School_ID   Int
+  AccountType Int
+}
+
+model Bookcases {
+  ID        Int    @id @default(autoincrement())
+  School_ID Int
+  Name      String @db.VarChar(512)
+}
+
+model Books {
+  ID              Int    @id @default(autoincrement())
+  Shelves_ID      Int
+  Title           String @db.VarChar(2048)
+  Author          String @db.VarChar(512)
+  PublishingHouse String @db.VarChar(512)
+  AgeCategory     Int
+  Type_ID         Int
+  LocalID         Int
+}
+
+model Class {
+  ID        Int    @id @default(autoincrement())
+  Name      String @db.Text
+  School_ID Int
+}
+
+model Pupils {
+  ID        Int    @id @default(autoincrement())
+  FirstName String @db.Text
+  LastName  String @db.Text
+  Class_ID  Int
+}
+
+model Rents {
+  ID         Int       @id @default(autoincrement())
+  Pupils_ID  Int
+  Book_ID    Int
+  Rented     Boolean   @default(true)
+  RentTime   DateTime  @default(now()) @db.Timestamp(0)
+  ReturnTime DateTime? @db.Timestamp(0)
+}
+
+model Schools {
+  ID       Int    @id @default(autoincrement())
+  Name     String @db.VarChar(512)
+  Location String @db.VarChar(2048)
+}
+
+model Shelves {
+  ID          Int    @id @default(autoincrement())
+  Bookcase_ID Int
+  Name        String @db.VarChar(512)
+}
+
+model Type {
+  ID   Int    @id @default(autoincrement())
+  Name String @db.VarChar(512)
+}

@@ -7,6 +7,11 @@ async function type() {
   await jsona.data.forEach((claa) => {
     let opt = document.createElement("option");
     opt.value = claa.ID;
+    if (typeof selectedtype != undefined) {
+      if (selectedtype == claa.ID) {
+        opt.selected = true
+      }
+    }
     opt.innerText = claa.Name;
     type.append(opt);
   });
@@ -20,6 +25,11 @@ async function shelf() {
   let jsona = await response.json();
   await jsona.data.forEach((claa) => {
     let opt = document.createElement("option");
+    if (typeof selectedshelf != undefined) {
+      if (selectedshelf == claa.ID) {
+        opt.selected = true
+      }
+    }
     opt.value = claa.ID;
     opt.innerText = "Szafka:" + claa.BookcaseName + "  Półka:" + claa.ShelfName;
     shelf.append(opt);
