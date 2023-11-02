@@ -18,18 +18,41 @@ router.use(express.json());
 
 router.post("/rent", async ({ session: { SchoolID }, body }, res) => {
   const { localID, firstname, lastname, classID } = body;
-  if (typeof localID == "undefined" || typeof firstname == "undefined" || typeof lastname == "undefined" || typeof classID == "undefined") return redirectWithText(res, 'Nie podałeś pełnych danych', getOldValue(Object.assign(body, { type: "err" })));
+  let message;
+
+  if (isNotUndifined(body)) return redirectWithText(res, 'Nie podałeś pełnych danych', getOldValue(Object.assign(body, { type: "err" })), "rent");
+
   let rented = await isRented(localID.replace(notNumbers, ""), SchoolID)
-  if (rented == "dberr") return redirectWithText(res, 'Błąd połączenia, spróbuj ponownie później', getOldValue(Object.assign(body, { type: "err" })));
-  else if (rented == "bookNotExist") return redirectWithText(res, 'Taki numer książki nie istnieje', getOldValue(Object.assign(body, { type: "err" })));
-  else if (rented) return redirectWithText(res, 'Ta książka jest już wyporzyczona', getOldValue(Object.assign(body, { type: "err" })));
-  else {
-    let rentValue = await rent(localID, firstname, lastname, classID, SchoolID)
-    if (rentValue == "bookNotExist") return redirectWithText(res, 'Taki numer książki nie istnieje', getOldValue(Object.assign(body, { type: "err" })));
-    else if (rentValue == "pupilNotExist") return redirectWithText(res, 'Taki uczeń nie istnieje', getOldValue(Object.assign(body, { type: "err" })));
-    else if (rentValue == "dberr") return redirectWithText(res, 'Błąd połączenia, spróbuj ponownie później', getOldValue(Object.assign(body, { type: "err" })));
-    return redirectWithText(res, 'Pomyślnie wyporzyczono', "&type=succes");
+
+  switch (rented) {
+    case "dberr":
+      message = "Błąd połączenia, spróbuj ponownie później";
+      break;
+    case "bookNotExist":
+      message = "Taki numer książki nie istnieje"
+      break;
+    case true:
+      message = "Ta książka jest już wyporzyczona"
+      break;
   }
+  if (rented != false) return redirectWithText(res, message, getOldValue(Object.assign(body, { type: "err" })), "rent");
+
+  let rentValue = await rent(localID.replace(notNumbers, ""), firstname.replace(specialChars, ""), lastname.replace(specialChars, ""), classID.replace(notNumbers, ""), SchoolID)
+
+  switch (rentValue) {
+    case "dberr":
+      message = "Błąd połączenia, spróbuj ponownie później";
+      break;
+    case "bookNotExist":
+      message = "Taki numer książki nie istnieje"
+      break;
+    case "pupilNotExist":
+      message = "Taki uczeń nie istnieje"
+      break;
+  }
+  if (rentValue != true) return redirectWithText(res, message, getOldValue(Object.assign(body, { type: "err" })), "rent");
+
+  return redirectWithText(res, 'Pomyślnie wyporzyczono', getOldValue({ type: "success" }), "rent");
 })
 
 //getRent
@@ -48,6 +71,13 @@ const isRented = (localID, schoolID) => {
   })
 }
 
+const isNotUndifined = (obj) => {
+  let r = false;
+  Object.entries(obj).forEach((v) => {
+    if (typeof v[1] == "undefined" && v[1] == "") r = true
+  })
+  return r
+}
 
 //rent
 const rent = async (localID, firstName, lastName, classID, schoolID) => {
@@ -98,8 +128,8 @@ const getOldValue = (values) => {
   return str;
 }
 
-const redirectWithText = (res, message, args) => {
-  res.redirect('/admin/rent?message=' + message + args);
+const redirectWithText = (res, message, args, subpage) => {
+  res.redirect(`/admin/${subpage}?message=` + message + args);
 }
 
 module.exports = router;
