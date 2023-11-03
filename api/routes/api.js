@@ -1,20 +1,11 @@
 var express = require("express");
 var router = express.Router();
-var mysql = require("mysql")
 var BooksRouter = require("./apis/books")
 var AuthRouter = require("./apis/auth")
 var ConfigRouter = require("./apis/config")
 var ManageRouter = require("./apis/manage")
 require('dotenv').config();
 
-// var con = mysql.createConnection({
-//     host: process.env.MYSQLhost ,
-//     user: process.env.MYSQLuser ,
-//     password: process.env.MYSQLpassword ,
-//     database: process.env.MYSQLdatabase 
-//   });
-
-// con.connect()
 router.use("/books", BooksRouter);
 router.use("/auth", AuthRouter);
 router.use("/config", (req, res, next)=>{
