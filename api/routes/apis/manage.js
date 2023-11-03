@@ -1,17 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const mysql = require("mysql")
 const addRouter = require("./manage/add")
 const { isNotUndifined, redirectWithText, getOldValue, getPupilID, getBookID, isRented } = require("./manage/manager")
-require('dotenv').config();
-
-let con = mysql.createConnection({
-  host: process.env.MYSQLhost,
-  user: process.env.MYSQLuser,
-  password: process.env.MYSQLpassword,
-  database: process.env.MYSQLdatabase
-});
-con.connect()
+const { PrismaClient, Prisma } = require('@prisma/client');
+const prisma = new PrismaClient()
 
 const specialChars = /['"`]/g
 const notNumbers = /\D/g
@@ -63,15 +55,18 @@ router.post("/rent", async ({ session: { SchoolID }, body }, res) => {
 //rent
 const rent = async (localID, firstName, lastName, classID, schoolID) => {
   return new Promise(async (res) => {
-    let pupilID = await getPupilID(firstName, lastName, classID)
-    let bookID = await getBookID(schoolID, localID)
-    if (pupilID == "dberr" || pupilID == "pupilNotExist") return res(pupilID)
-    if (bookID == "dberr" || bookID == "bookNotExist") return res(bookID)
-    console.log(bookID)
-    con.query(`INSERT INTO Rents(Pupils_ID, Book_ID) VALUES (${pupilID}, ${bookID});`, (err, rows, fields) => {
-      if (err) return res("dberr");
-      res(true)
-    })
+    let create = null;
+    let pupilsId = await getPupilID(firstName, lastName, classID)
+    let booksId = await getBookID(schoolID, localID)
+    if (pupilsId == "dberr" || pupilsId == "pupilNotExist") return res(pupilsId)
+    if (booksId == "dberr" || booksId == "bookNotExist") return res(booksId)
+    try {
+      create = await prisma.rents.create({ data: { pupilsId, booksId } });
+    }catch(err){
+      return res("dberr")
+    }
+    if(create!=null) res(true)
+    else res("dberr")
   })
 }
 
