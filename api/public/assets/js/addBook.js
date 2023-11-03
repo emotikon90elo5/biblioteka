@@ -9,7 +9,7 @@ async function type() {
     opt.value = claa.ID;
     if (typeof selectedtype != undefined) {
       if (selectedtype == claa.ID) {
-        opt.selected = true
+        opt.selected = true;
       }
     }
     opt.innerText = claa.Name;
@@ -17,6 +17,7 @@ async function type() {
   });
 }
 type();
+
 async function shelf() {
   let shelf = document.getElementById("shelf");
   const response = await fetch("http://localhost:4000/api/config/shelf", {
@@ -24,15 +25,17 @@ async function shelf() {
   });
   let jsona = await response.json();
   await jsona.data.forEach((claa) => {
-    let opt = document.createElement("option");
-    if (typeof selectedshelf != undefined) {
-      if (selectedshelf == claa.ID) {
-        opt.selected = true
+    claa.shelves.forEach((e) => {
+      let opt = document.createElement("option");
+      if (typeof selectedshelf != undefined) {
+        if (selectedshelf == e.id) {
+          opt.selected = true;
+        }
       }
-    }
-    opt.value = claa.ID;
-    opt.innerText = "Szafka:" + claa.BookcaseName + "  Półka:" + claa.ShelfName;
-    shelf.append(opt);
+      opt.value = e.id;
+      opt.innerText ="Szafka:" + claa.name + "  Półka:" + e.name;
+      shelf.append(opt);
+    });
   });
 }
 shelf();
