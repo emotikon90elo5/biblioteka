@@ -6,8 +6,8 @@ async function shelf() {
     let jsona = await response.json();
     await jsona.data.forEach((e) => {
       let opt = document.createElement("option");
-      opt.value = e.ID;
-      opt.innerText = e.Name;
+      opt.value = e.id;
+      opt.innerText = e.name;
       shelf.append(opt);
     });
   }

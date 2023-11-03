@@ -6,12 +6,12 @@ async function update() {
   });
   let jsona = await response.json();
   console.log(jsona);
-  document.getElementById("title").value = jsona.data.Title;
-  document.getElementById("author").value=jsona.data.Author
-  document.getElementById("publishingHouse").value=jsona.data.PublishingHouse
-  document.getElementById("ageCategory").value=jsona.data.AgeCategory
-  document.getElementById("type").value=jsona.data.Type_ID
-  document.getElementById("shelf").value=jsona.data.Shelves_ID
-  document.getElementById("localID").value=jsona.data.LocalID
+  document.getElementById("title").value = jsona.data.title;
+  document.getElementById("author").value=jsona.data.author
+  document.getElementById("publishingHouse").value=jsona.data.publishingHouse
+  document.getElementById("ageCategory").value=jsona.data.ageCategory
+  document.getElementById("type").value=jsona.data.typeid
+  document.getElementById("shelf").value=jsona.data.shelvesId
+  document.getElementById("localID").value=jsona.data.localid
 }
 update();

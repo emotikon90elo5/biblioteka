@@ -32,5 +32,13 @@ router.get("/book/:page", (req, res) => {
 router.get("/book/update/:id", (req, res) => {
     res.render("admin/updateBook",{page:req.params.id})
 })
-
+router.get("/addPupil", (req, res) => {
+    res.render("admin/addPupil")
+})
+router.get("/pupilList", (req, res) => {
+    res.render("admin/pupilList")
+})
+router.get("/updatePupil", (req, res) => {
+    res.render("admin/updatePupil")
+})
 module.exports = router;

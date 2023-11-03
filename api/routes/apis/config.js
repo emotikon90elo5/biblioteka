@@ -58,7 +58,7 @@ router.get("/bookcase", async ({ session: { SchoolID } }, res) => {
 
   let bookcases;
   try {
-    bookcases = await prisma.class.findMany({
+    bookcases = await prisma.bookcases.findMany({
       where: {
         schoolsId: SchoolID
       }
@@ -101,5 +101,24 @@ router.get("/books", async ({ session: { SchoolID } }, res) => {
   res.json({
     succes: true, data: books
   })
+})
+
+router.get("/pupils", async ({ session: { SchoolID } }, res) => {
+
+  let pupils;
+  try {
+    pupils = await prisma.pupils.findMany({
+      where: {
+        class: {
+          schoolsId:SchoolID
+        }
+      }
+    })
+  } catch (err) {
+    return res.json({ succes: false })
+  }
+  if (pupils == null) return res.json({ succes: false })
+  return res.json({ succes: true, data: pupils })
+
 })
 module.exports = router;

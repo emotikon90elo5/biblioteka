@@ -6,13 +6,13 @@ async function type() {
   let jsona = await response.json();
   await jsona.data.forEach((claa) => {
     let opt = document.createElement("option");
-    opt.value = claa.ID;
+    opt.value = claa.id;
     if (typeof selectedtype != undefined) {
-      if (selectedtype == claa.ID) {
+      if (selectedtype == claa.id) {
         opt.selected = true;
       }
     }
-    opt.innerText = claa.Name;
+    opt.innerText = claa.name;
     type.append(opt);
   });
 }

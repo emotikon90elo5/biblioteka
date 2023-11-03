@@ -12,15 +12,15 @@ async function shelf() {
     let tr = document.createElement("tr");
 
     let td1 = document.createElement("td");
-    td1.innerText = e.Title;
+    td1.innerText = e.title;
     tr.append(td1);
 
     let td2 = document.createElement("td");
-    td2.innerText = e.Author;
+    td2.innerText = e.author;
     tr.append(td2);
 
     let td3 = document.createElement("td");
-    td3.innerText = e.LocalID;
+    td3.innerText = e.localid;
     tr.append(td3);
 
     let td4 = document.createElement("td");
@@ -31,7 +31,7 @@ async function shelf() {
       popupRemove();
     };
     function popupRemove() {
-      popupText.innerHTML = `<b>${e.Title}</b>`;
+      popupText.innerHTML = `<b>${e.title}</b>`;
 
       $("#exampleModalCenter").modal("show");
     }
@@ -42,7 +42,7 @@ async function shelf() {
     td4.append(button);
 
     let updateHref = document.createElement("a");
-    updateHref.href = `/admin/book/update/${e.ID}`;
+    updateHref.href = `/admin/book/update/${e.id}`;
     let update = document.createElement("i");
     update.classList.add("ti");
     update.classList.add("ti-pencil");

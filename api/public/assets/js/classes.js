@@ -7,12 +7,12 @@ async function classes() {
   await jsona.data.forEach((claa) => {
     let opt = document.createElement("option");
     if (typeof selected != undefined) {
-      if (selected == claa.ID) {
+      if (selected == claa.id) {
         opt.selected = true
       }
     }
-    opt.value = claa.ID;
-    opt.innerText = claa.Name;
+    opt.value = claa.id;
+    opt.innerText = claa.name;
     clas.append(opt);
   });
 }
