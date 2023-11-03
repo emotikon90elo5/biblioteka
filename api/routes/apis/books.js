@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const { PrismaClient, Prisma } = require('@prisma/client');
 const errHanler = require("../errorHandler")
-
 const prisma = new PrismaClient()
 
 router.use(express.json());

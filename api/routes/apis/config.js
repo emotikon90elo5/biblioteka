@@ -1,64 +1,98 @@
-var express = require("express");
-var router = express.Router();
-var mysql = require("mysql")
-require('dotenv').config();
-
-var con = mysql.createConnection({
-  host: process.env.MYSQLhost,
-  user: process.env.MYSQLuser,
-  password: process.env.MYSQLpassword,
-  database: process.env.MYSQLdatabase
-});
-
-con.connect()
+const express = require("express");
+const router = express.Router();
+const { PrismaClient, Prisma } = require('@prisma/client');
+const errHanler = require("../errorHandler")
+const prisma = new PrismaClient()
 
 router.use(express.json());
 
-router.get("/class", ({ session: { SchoolID } }, res) => {
-
-  con.query(`SELECT ID, Name FROM Class WHERE School_ID = "${SchoolID}"`, (err, rows, fields) => {
-    if (err) throw err
-    if (!rows[0]) return res.json({ succes: false })
-    return res.json({ succes: true, data: rows })
-  })
-
-})
-router.get("/types", ({ }, res) => {
-
-  con.query(`SELECT * FROM Type;`, (err, rows, fields) => {
-    if (err) throw err
-    if (!rows[0]) return res.json({ succes: false })
-    return res.json({ succes: true, data: rows })
-  })
-
+router.get("/class", async ({ session: { SchoolID } }, res) => {
+  let classList;
+  try {
+    classList = await prisma.class.findMany({
+      where: {
+        schoolsId: SchoolID
+      }
+    })
+  } catch (err) {
+    return  res.json({ succes: false })
+  }
+  if (classList == null) return res.json({ succes: false })
+  return res.json({ succes: true, data: classList })
 })
 
-router.get("/shelf", ({ session: { SchoolID } }, res) => {
+router.get("/types", async ({ }, res) => {
+  let types;
+  try {
+    types = await prisma.type.findMany({})
+  } catch (err) {
+    return res.json({ succes: false })
+  }
+  if (types == null) return res.json({ succes: false })
+  return res.json({ succes: true, data: types })
+})
 
-  con.query(`SELECT Bookcases.Name AS BookcaseName, Shelves.Name  AS ShelfName, Shelves.ID AS ID FROM Bookcases 
-  INNER JOIN Shelves ON Shelves.Bookcase_ID = Bookcases.ID WHERE School_ID = "${SchoolID}";`, (err, rows, fields) => {
-    if (err) throw err
-    if (!rows[0]) return res.json({ succes: false })
-    return res.json({ succes: true, data: rows })
-  })
+router.get("/shelf", async ({ session: { SchoolID } }, res) => {
+  let shelf;
+  try {
+    shelf = await prisma.bookcases.findMany({
+      where: {
+        schoolsId: SchoolID
+      },
+      include: {
+        shelves: {
+          select:{
+            name: true
+          }
+        }
+      }
+    })
+  } catch (err) {
+    return res.json({ succes: false })
+  }
+  if (shelf == null) return res.json({ succes: false })
+  return res.json({ succes: true, data: shelf })
+})
+router.get("/bookcase", async ({ session: { SchoolID } }, res) => {
+
+  let bookcases;
+  try {
+    bookcases = await prisma.class.findMany({
+      where: {
+        schoolsId: SchoolID
+      }
+    })
+  } catch (err) {
+    return  res.json({ succes: false })
+  }
+  if (bookcases == null) return res.json({ succes: false })
+  return res.json({ succes: true, data: bookcases })
 
 })
-router.get("/bookcase", ({ session: { SchoolID } }, res) => {
-
-  con.query(`SELECT ID,Name FROM Bookcases WHERE School_ID = "${SchoolID}";`, (err, rows, fields) => {
-    if (err) throw err
-    if (!rows[0]) return res.json({ succes: false })
-    return res.json({ succes: true, data: rows })
-  })
-
-})
-router.get("/books", ({ session: { SchoolID } }, res) => {
-
-  con.query(`SELECT Books.ID AS ID, Books.Shelves_ID AS Shelves_ID, Books.Title AS Title, Books.Author as Author, Books.PublishingHouse AS PublishingHouse, Books.AgeCategory as AgeCategory, Books.Type_ID as Type_ID, Books.LocalID AS LocalID FROM Books INNER JOIN Shelves INNER join Bookcases ON Books.Shelves_ID = Shelves.ID AND Shelves.Bookcase_ID = Bookcases.ID WHERE Bookcases.School_ID = "${SchoolID}";`, (err, rows, fields) => {
-    if (err) throw err
-    if (!rows[0]) return res.json({ succes: false })
-    return res.json({ succes: true, data: rows })
-  })
-
+router.get("/books", async ({ session: { SchoolID } }, res) => {
+  let school
+  try {
+    school = await prisma.schools.findFirst({
+      where: {
+        id: SchoolID
+      },
+      include: {
+        bookcases: {
+          include: {
+            shelves: {
+              include: {
+                books: true
+              }
+            }
+          }
+        }
+      }
+    })
+  }
+  catch (err) {
+    return res.json({ succes: false })
+  }
+  if (school == null) return res.json({ succes: false })
+  res.json({ succes: true, data: school })
 })
 module.exports = router;
