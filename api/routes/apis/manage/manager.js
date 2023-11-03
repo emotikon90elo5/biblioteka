@@ -1,26 +1,40 @@
-const mysql = require("mysql")
-require('dotenv').config();
-let con = mysql.createConnection({
-    host: process.env.MYSQLhost,
-    user: process.env.MYSQLuser,
-    password: process.env.MYSQLpassword,
-    database: process.env.MYSQLdatabase
-});
-con.connect()
+const { PrismaClient, Prisma } = require('@prisma/client');
+const prisma = new PrismaClient()
 
+const specialChars = /['"`]/g
+const notNumbers = /\D/g
 
 const isRented = (localID, schoolID) => {
-    return new Promise((res) => {
-        con.query(`SELECT Rented FROM Books INNER JOIN Rents ON Book_ID=Books.ID INNER JOIN Shelves ON Books.Shelves_ID=Shelves.ID 
-      INNER JOIN Bookcases ON Shelves.Bookcase_ID = Bookcases.ID 
-      WHERE Bookcases.School_ID=${schoolID} AND LocalID="${localID}"; `, (err, rows, fields) => {
-            if (err) return res("dberr")
-            if (!rows[0]) return res("bookNotExist")
-            rows.forEach(element => {
-                if (element.Rented == 1) return res(true)
-            });
-            res(false)
-        })
+    return new Promise(async (res) => {
+        let renteds;
+        try {
+            renteds = await prisma.books.findFirst({
+                where: {
+                    shelf: {
+                        bookcase: {
+                            schoolsId: schoolID
+                        }
+                    },
+                    localid: Number(localID.replace(notNumbers, ""))
+                },
+                include: {
+                    rents: {
+                        select: {
+                            rented: true
+                        }
+                    }
+                }
+            })
+        } catch (err) {
+            console.log(err)
+            return res("dberr")
+        }
+        if (renteds == null) return res("bookNotExist")
+        renteds.rents.forEach(element => {
+            if (element.Rented == 1) return res(true)
+        });
+        res(false)
+
     })
 }
 
@@ -34,28 +48,46 @@ let isNotUndifined = (obj) => {
 
 
 const getPupilID = (firstName, lastName, classID) => {
-    return new Promise((res) => {
-        con.query(`SELECT Pupils.ID AS ID FROM Pupils WHERE Pupils.FirstName = "${firstName}" 
-                                                AND Pupils.LastName = "${lastName}" 
-                                                AND Pupils.Class_ID= "${classID}";`
-            , (err, rows, fields) => {
-                if (err) return res("dberr");
-                if (!rows[0]) return res("pupilNotExist")
-                res(rows[0].ID)
+    let pupil;
+    return new Promise(async (res) => {
+        try {
+            pupil = await prisma.pupils.findFirst({
+                where: {
+                    firstName: firstName,
+                    lastName: lastName,
+                    classId: Number(classID.replace(notNumbers, ""))
+                }
             })
+        } catch (err) {
+            console.log(err)
+            return res("dberr")
+        }
+        if (pupil == null) return res("pupilNotExist")
+        res(pupil.id)
     })
 }
 
 const getBookID = (schoolID, localID) => {
-    return new Promise((res) => {
-        con.query(`SELECT Books.ID AS ID FROM Books INNER JOIN Shelves ON Books.Shelves_ID=Shelves.ID 
-      INNER JOIN Bookcases ON Shelves.Bookcase_ID = Bookcases.ID 
-      WHERE Bookcases.School_ID = "${schoolID}" AND Books.LocalID="${localID}"`
-            , (err, rows, fields) => {
-                if (err) res("dberr");
-                if (!rows[0]) res("bookNotExist")
-                res(rows[0].ID)
+    return new Promise(async (res) => {
+        let book;
+        try {
+            book = await prisma.books.findFirst({
+                where: {
+                    shelf: {
+                        bookcase: {
+                            schoolsId: schoolID
+                        }
+                    },
+                    localid: Number(localID.replace(notNumbers, ""))
+                }
             })
+        } catch (err) {
+            console.log(err)
+            return res("dberr")
+        }
+        if (book == null) return res("bookNotExist")
+        res(book.id)
+
     })
 }
 

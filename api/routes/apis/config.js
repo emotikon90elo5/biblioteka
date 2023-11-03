@@ -71,16 +71,13 @@ router.get("/bookcase", async ({ session: { SchoolID } }, res) => {
 
 })
 router.get("/books", async ({ session: { SchoolID } }, res) => {
-  let bookcases, books = []
+  let books
   try {
-    bookcases = await prisma.bookcases.findMany({
+    books = await prisma.books.findMany({
       where: {
-        schoolsId: SchoolID
-      },
-      include: {
-        shelves: {
-          include: {
-            books: true
+        shelf: {
+          bookcase: {
+            schoolsId: SchoolID
           }
         }
       }
@@ -89,15 +86,7 @@ router.get("/books", async ({ session: { SchoolID } }, res) => {
   catch (err) {
     return res.json({ succes: false })
   }
-  if (bookcases == null) return res.json({ succes: false })
-  bookcases.forEach(a => {
-
-    a?.shelves?.forEach(b => {
-    
-      books=books.concat(b?.books)
-    })
-  });
-  console.log(books)
+  if (books == null) return res.json({ succes: false })
   res.json({
     succes: true, data: books
   })
