@@ -70,7 +70,7 @@ router.get("/School/:id", async ({ params: { id } }, res) => {
   try {
     school = await prisma.schools.findFirst({
       where: {
-        id: Number(id.replace(notNumbers, ""))
+        id: id
       },
       include: {
         bookcases: {
@@ -91,6 +91,7 @@ router.get("/School/:id", async ({ params: { id } }, res) => {
   if (school == null) return res.json({ succes: false })
   res.json({ succes: true, data: school })
 })
+
 
 // router.get("/find/School/:id", ({ params: { id }, query: { title, author, publishinghouse, agecategory } }, res) => {
 

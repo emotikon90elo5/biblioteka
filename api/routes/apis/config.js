@@ -15,7 +15,7 @@ router.get("/class", async ({ session: { SchoolID } }, res) => {
       }
     })
   } catch (err) {
-    return  res.json({ succes: false })
+    return res.json({ succes: false })
   }
   if (classList == null) return res.json({ succes: false })
   return res.json({ succes: true, data: classList })
@@ -41,7 +41,8 @@ router.get("/shelf", async ({ session: { SchoolID } }, res) => {
       },
       include: {
         shelves: {
-          select:{
+          select: {
+            id: true,
             name: true
           }
         }
@@ -63,27 +64,23 @@ router.get("/bookcase", async ({ session: { SchoolID } }, res) => {
       }
     })
   } catch (err) {
-    return  res.json({ succes: false })
+    return res.json({ succes: false })
   }
   if (bookcases == null) return res.json({ succes: false })
   return res.json({ succes: true, data: bookcases })
 
 })
 router.get("/books", async ({ session: { SchoolID } }, res) => {
-  let school
+  let bookcases, books = []
   try {
-    school = await prisma.schools.findFirst({
+    bookcases = await prisma.bookcases.findMany({
       where: {
-        id: SchoolID
+        schoolsId: SchoolID
       },
       include: {
-        bookcases: {
+        shelves: {
           include: {
-            shelves: {
-              include: {
-                books: true
-              }
-            }
+            books: true
           }
         }
       }
@@ -92,7 +89,17 @@ router.get("/books", async ({ session: { SchoolID } }, res) => {
   catch (err) {
     return res.json({ succes: false })
   }
-  if (school == null) return res.json({ succes: false })
-  res.json({ succes: true, data: school })
+  if (bookcases == null) return res.json({ succes: false })
+  bookcases.forEach(a => {
+
+    a?.shelves?.forEach(b => {
+    
+      books=books.concat(b?.books)
+    })
+  });
+  console.log(books)
+  res.json({
+    succes: true, data: books
+  })
 })
 module.exports = router;
