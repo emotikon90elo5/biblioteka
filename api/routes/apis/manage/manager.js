@@ -31,7 +31,7 @@ const isRented = (localID, schoolID) => {
         }
         if (renteds == null) return res("bookNotExist")
         renteds.rents.forEach(element => {
-            if (element.Rented == 1) return res(true)
+            if (element.rented == 1) return res(true)
         });
         res(false)
 

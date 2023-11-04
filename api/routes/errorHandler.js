@@ -15,9 +15,8 @@ const errHanler = (err) => {
         return "Błąd połączenia, spróbuj ponownie później"
     }
     if (err instanceof Prisma.PrismaClientValidationError) {
-        console.log(err.code)
         return "Podałeś niepoprawne dane"
-        
+
     }
 }
 module.exports = errHanler
