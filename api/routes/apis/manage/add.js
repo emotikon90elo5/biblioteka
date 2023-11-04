@@ -23,17 +23,24 @@ router.post("/shelf", async ({ body }, res) => {
     if (isNotUndifined(body)) return redirectWithText(res, 'Nie podałeś pełnych danych', getOldValue(Object.assign(body, { messagetype: "err" })), "addshelf");
     const addShelfValue = await addShelf(name, bookcase.replace(notNumbers, ""))
     if (addShelfValue != true) return redirectWithText(res, addShelfValue, getOldValue(Object.assign(body, { messagetype: "err" })), "addshelf");
-    redirectWithText(res, "Pomyślnie dodano książkę", getOldValue({ messagetype: "success" }), "addshelf")
+    redirectWithText(res, "Pomyślnie dodano połkę", getOldValue({ messagetype: "success" }), "addshelf")
 })
 
 router.post("/bookcase", async ({ body, session: { SchoolID } }, res) => {
     const { name } = body
-    if (isNotUndifined({name:name})) return redirectWithText(res, 'Nie podałeś pełnych danych', getOldValue(Object.assign(body, { messagetype: "err" })), "addbookcase");
+    if (isNotUndifined({ name: name })) return redirectWithText(res, 'Nie podałeś pełnych danych', getOldValue(Object.assign(body, { messagetype: "err" })), "addbookcase");
     const addBookcaseValue = await addBookcase(name, SchoolID)
     if (addBookcaseValue != true) return redirectWithText(res, addBookcaseValue, getOldValue(Object.assign(body, { messagetype: "err" })), "addbookcase");
-    redirectWithText(res, "Pomyślnie dodano książkę", getOldValue({ messagetype: "success" }), "addbookcase")
+    redirectWithText(res, "Pomyślnie dodano szafkę", getOldValue({ messagetype: "success" }), "addbookcase")
 })
 
+router.post("/class", async ({ body, session: { SchoolID } }, res) => {
+    const { name } = body
+    if (isNotUndifined({ name: name })) return redirectWithText(res, 'Nie podałeś pełnych danych', getOldValue(Object.assign(body, { messagetype: "err" })), "addclass");
+    const addClassValue = await addClass(name, SchoolID)
+    if (addClassValue != true) return redirectWithText(res, addClassValue, getOldValue(Object.assign(body, { messagetype: "err" })), "addclass");
+    redirectWithText(res, "Pomyślnie dodano klasę", getOldValue({ messagetype: "success" }), "addclass")
+})
 
 const addBook = (title, author, publishingHouse, ageCategory, type, shelf, localID) => {
     return new Promise(async (res) => {
@@ -91,4 +98,23 @@ const addBookcase = (name, schoolID) => {
         return res(true)
     })
 }
+
+const addClass = (name, schoolID) => {
+    return new Promise(async (res) => {
+        let clas;
+        try {
+            clas = await prisma.class.create({
+                data: {
+                    name: name,
+                    schoolsId: Number(schoolID)
+                }
+            })
+        } catch (err) {
+            return res(errHanler(err))
+        }
+        return res(true)
+    })
+}
+
+
 module.exports = router;

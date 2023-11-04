@@ -20,8 +20,13 @@ router.get("/addBookCase", (req, res) => {
     res.render("admin/addBookCase", req.query)
 })
 router.get("/addClass", (req, res) => {
-    res.render("admin/addClass")
+    res.render("admin/addClass", req.query)
 })
+
+router.get("/addPupil", (req, res) => {
+    res.render("admin/addPupil")
+})
+
 router.get("/book", (req, res) => {
     res.redirect("/admin/book/1")
 })
@@ -32,9 +37,7 @@ router.get("/book/:page", (req, res) => {
 router.get("/book/update/:id", (req, res) => {
     res.render("admin/updateBook",{page:req.params.id})
 })
-router.get("/addPupil", (req, res) => {
-    res.render("admin/addPupil")
-})
+
 router.get("/pupilList", (req, res) => {
     res.render("admin/pupilList")
 })
