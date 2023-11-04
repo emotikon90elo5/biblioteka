@@ -4,11 +4,12 @@ let PopupCommit = document.getElementById("Commit");
 async function shelf() {
   let table = document.getElementById("table");
   let popupText = document.getElementById("exampleModalLongTitleContent");
-  const response = await fetch("http://localhost:4000/api/config/pupils", {
+  const response = await fetch(`http://localhost:4000/api/config/classpupils/${id}`, {
     credentials: "include",
   });
   let jsona = await response.json();
-  await jsona.data.forEach((e) => {
+  document.getElementById("name").value = jsona.data.name
+  await jsona.data.pupils.forEach((e) => {
     let tr = document.createElement("tr");
 
     let td1 = document.createElement("td");
@@ -18,10 +19,6 @@ async function shelf() {
     let td2 = document.createElement("td");
     td2.innerText = e.lastName;
     tr.append(td2);
-
-    let td3 = document.createElement("td");
-    td3.innerText = e.class.name;
-    tr.append(td3);
 
     let td4 = document.createElement("td");
 

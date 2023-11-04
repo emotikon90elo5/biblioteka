@@ -142,4 +142,26 @@ router.get("/pupils/:id", async ({ session: { SchoolID },params:{id} }, res) => 
   return res.json({ succes: true, data: pupils })
 
 })
+router.get("/classpupils/:id", async ({ session: { SchoolID },params:{id} }, res) => {
+
+  let pupils;
+  try {
+    pupils = await prisma.class.findFirst({
+      where: {
+        id:Number(id.replace(notNumbers ,"")),
+          schoolsId:SchoolID
+      }
+      ,include:{
+        pupils:true
+      }
+    })
+  } catch (err) {
+    console.log(err)
+    return res.json({ succes: false })
+    
+  }
+  if (pupils == null) return res.json({ succes: false })
+  return res.json({ succes: true, data: pupils })
+
+})
 module.exports = router;
