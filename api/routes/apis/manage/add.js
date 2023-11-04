@@ -42,6 +42,14 @@ router.post("/class", async ({ body, session: { SchoolID } }, res) => {
     redirectWithText(res, "Pomyślnie dodano klasę", getOldValue({ messagetype: "success" }), "addclass")
 })
 
+router.post("/pupil", async ({ body }, res) => {
+    const { firstName, lastName, classID } = body
+    if (isNotUndifined(body)) return redirectWithText(res, 'Nie podałeś pełnych danych', getOldValue(Object.assign(body, { messagetype: "err" })), "addpupil");
+    const addPupilValue = await addPupil(firstName, lastName, classID.replace(notNumbers, ""))
+    if (addPupilValue != true) return redirectWithText(res, addPupilValue, getOldValue(Object.assign(body, { messagetype: "err" })), "addpupil");
+    redirectWithText(res, "Pomyślnie dodano ucznia", getOldValue({ messagetype: "success" }), "addpupil")
+})
+
 const addBook = (title, author, publishingHouse, ageCategory, type, shelf, localID) => {
     return new Promise(async (res) => {
         let book;
@@ -107,6 +115,24 @@ const addClass = (name, schoolID) => {
                 data: {
                     name: name,
                     schoolsId: Number(schoolID)
+                }
+            })
+        } catch (err) {
+            return res(errHanler(err))
+        }
+        return res(true)
+    })
+}
+
+const addPupil = (firstName, lastName, classId) => {
+    return new Promise(async (res) => {
+        let clas;
+        try {
+            clas = await prisma.pupils.create({
+                data: {
+                    firstName: firstName,
+                    lastName: lastName,
+                    classId: Number(classId)
                 }
             })
         } catch (err) {
