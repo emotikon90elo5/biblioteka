@@ -41,7 +41,7 @@ const isRented = (localID, schoolID) => {
 let isNotUndifined = (obj) => {
     let r = false;
     Object.entries(obj).forEach((v) => {
-        if (typeof v[1] == "undefined" && v[1] == "") r = true
+        if (typeof v[1] == "undefined" || v[1] == "") r = true
     })
     return r
 }
