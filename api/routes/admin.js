@@ -24,7 +24,7 @@ router.get("/addClass", (req, res) => {
 })
 
 router.get("/addPupil", (req, res) => {
-    res.render("admin/addPupil")
+    res.render("admin/addPupil", req.query)
 })
 
 router.get("/book", (req, res) => {
