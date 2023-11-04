@@ -26,6 +26,15 @@ router.post("/shelf", async ({ body }, res) => {
     redirectWithText(res, "Pomyślnie dodano książkę", getOldValue({ messagetype: "success" }), "addshelf")
 })
 
+router.post("/bookcase", async ({ body, session: { SchoolID } }, res) => {
+    const { name } = body
+    if (isNotUndifined({name:name})) return redirectWithText(res, 'Nie podałeś pełnych danych', getOldValue(Object.assign(body, { messagetype: "err" })), "addbookcase");
+    const addBookcaseValue = await addBookcase(name, SchoolID)
+    if (addBookcaseValue != true) return redirectWithText(res, addBookcaseValue, getOldValue(Object.assign(body, { messagetype: "err" })), "addbookcase");
+    redirectWithText(res, "Pomyślnie dodano książkę", getOldValue({ messagetype: "success" }), "addbookcase")
+})
+
+
 const addBook = (title, author, publishingHouse, ageCategory, type, shelf, localID) => {
     return new Promise(async (res) => {
         let book;
@@ -66,4 +75,20 @@ const addShelf = (name, bookcasesId) => {
     })
 }
 
+const addBookcase = (name, schoolID) => {
+    return new Promise(async (res) => {
+        let bookcase;
+        try {
+            bookcase = await prisma.bookcases.create({
+                data: {
+                    name: name,
+                    schoolsId: Number(schoolID)
+                }
+            })
+        } catch (err) {
+            return res(errHanler(err))
+        }
+        return res(true)
+    })
+}
 module.exports = router;
