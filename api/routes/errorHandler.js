@@ -3,7 +3,7 @@ const { Prisma } = require("@prisma/client")
 const errHanler = (err) => {
 
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        return "Nie możesz tego stworzyć gdyż już istnieje przedmiot o tym samym identyfikatorze!"
+        return "Podałeś niepoprawne dane"
     }
     if (err instanceof Prisma.PrismaClientUnknownRequestError) {
         return "Błąd połączenia, spróbuj ponownie później"

@@ -14,7 +14,7 @@ router.get("/addBook", (req, res) => {
     res.render("admin/addBook", req.query)
 })
 router.get("/addShelf", (req, res) => {
-    res.render("admin/addShelf")
+    res.render("admin/addShelf", req.query)
 })
 router.get("/addBookCase", (req, res) => {
     res.render("admin/addBookCase")
