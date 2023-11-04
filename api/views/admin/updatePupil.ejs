@@ -8,15 +8,27 @@
   <link rel="shortcut icon" type="image/png" href="/imgs/logo.png" />
   <link rel="stylesheet" href="/assets/css/styles.min.css" />
   <script src="/assets/js/classes.js" defer></script>
-  <% if (typeof classID !='undefined' ) { %>
+  <script src="/assets/js/updatePupil.js" defer></script>
+  <% if (typeof id !='undefined' ) { %>
     <script>
-      let selected = <%=classID%>
+      let selected = <%=id%>
     </script>
     <% } else{%>
       <script defer>
           let selected = -1
       </script>
       <%}%>
+      <% if (typeof pupilId !='undefined' ) { %>
+        <script>
+          let pupilId = <%=pupilId%>
+            
+        </script>
+        <% } 
+        else{%>
+          <script>
+              let pupilId = -1
+          </script>
+          <%}%>
 
 </head>
 

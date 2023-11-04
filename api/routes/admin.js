@@ -38,7 +38,7 @@ router.get("/addPupil", (req, res) => {
 router.get("/pupilList", (req, res) => {
     res.render("admin/pupilList")
 })
-router.get("/updatePupil", (req, res) => {
-    res.render("admin/updatePupil")
+router.get("/updatePupil/:pupilId", (req, res) => {
+    res.render("admin/updatePupil",{pupilId:req.params.pupilId})
 })
 module.exports = router;

@@ -3,6 +3,7 @@ const router = express.Router();
 const { PrismaClient, Prisma } = require('@prisma/client');
 const errHanler = require("../errorHandler")
 const prisma = new PrismaClient()
+const notNumbers = /\D/g
 
 router.use(express.json());
 
@@ -101,10 +102,41 @@ router.get("/pupils", async ({ session: { SchoolID } }, res) => {
         class: {
           schoolsId:SchoolID
         }
+        
+      }
+      ,include:{
+        class:true
       }
     })
   } catch (err) {
+    console.log(err)
     return res.json({ succes: false })
+    
+  }
+  if (pupils == null) return res.json({ succes: false })
+  return res.json({ succes: true, data: pupils })
+
+})
+router.get("/pupils/:id", async ({ session: { SchoolID },params:{id} }, res) => {
+
+  let pupils;
+  try {
+    pupils = await prisma.pupils.findFirst({
+      where: {
+        id:Number(id.replace(notNumbers ,"")),
+        class: {
+          schoolsId:SchoolID
+        }
+        
+      }
+      ,include:{
+        class:true
+      }
+    })
+  } catch (err) {
+    console.log(err)
+    return res.json({ succes: false })
+    
   }
   if (pupils == null) return res.json({ succes: false })
   return res.json({ succes: true, data: pupils })
