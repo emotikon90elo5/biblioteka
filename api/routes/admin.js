@@ -49,4 +49,7 @@ router.get("/updatePupil/:pupilId", (req, res) => {
 router.get("/classList", (req, res) => {
     res.render("admin/classList")
 })
+router.get("/shelfList", (req, res) => {
+    res.render("admin/shelfList")
+})
 module.exports = router;

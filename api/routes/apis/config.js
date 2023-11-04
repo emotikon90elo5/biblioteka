@@ -15,8 +15,8 @@ router.get("/class", async ({ session: { SchoolID } }, res) => {
         schoolsId: SchoolID,
       },
       select: {
-        id:true,
-        name:true,
+        id: true,
+        name: true,
         _count: {
           select: {
             pupils: true,
@@ -56,9 +56,15 @@ router.get("/shelf", async ({ session: { SchoolID } }, res) => {
             name: true,
           },
         },
+        _count: {
+          select: {
+            shelves: true,
+          },
+        },
       },
     });
   } catch (err) {
+    console.log(err);
     return res.json({ succes: false });
   }
   if (shelf == null) return res.json({ succes: false });
