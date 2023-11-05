@@ -27,6 +27,15 @@ router.delete("/shelf", async ({ body, session: { SchoolID } }, res) => {
     res.json({ succes: true })
 })
 
+router.delete("/bookcase", async ({ body, session: { SchoolID } }, res) => {
+    const { id } = body
+    if (isNotUndifined(body)) return res.json({ succes: false, message: "Bad request" });
+    const deleteBookcaseValue = await deleteBookcase(Number(id.replace(notNumbers, "")), SchoolID)
+    if (deleteBookcaseValue != true) return res.json({ succes: false, message: deleteBookcaseValue });
+    res.json({ succes: true })
+})
+
+
 const deleteBook = (id, schoolsId) => {
     return new Promise(async (res) => {
         try {
@@ -75,9 +84,8 @@ const deleteShelf = (id, schoolsId) => {
                 },
             })
         } catch (err) {
-            if(err instanceof PrismaClientKnownRequestError){
-                if(err.code=='P2003' && err.meta.field_name=='shelvesId')
-                {
+            if (err instanceof PrismaClientKnownRequestError) {
+                if (err.code == 'P2003' && err.meta.field_name == 'shelvesId') {
                     return res("Nie możesz usunąć półki na której są książki!")
                 }
             }
@@ -86,6 +94,29 @@ const deleteShelf = (id, schoolsId) => {
         return res(true)
     })
 }
+
+const deleteBookcase = (id, schoolsId) => {
+    return new Promise(async (res) => {
+        try {
+            await prisma.bookcases.delete({
+                where: {
+                    id: id,
+                    schoolsId:schoolsId
+                },
+            })
+        } catch (err) {
+            if (err instanceof PrismaClientKnownRequestError) {
+                if (err.code == 'P2003' && err.meta.field_name == 'bookcasesId') {
+                    return res("Nie możesz usunąć szfki w której są półki!")
+                }
+            }
+            return res(errHanler(err))
+        }
+        return res(true)
+    })
+}
+
+
 
 
 module.exports = router;

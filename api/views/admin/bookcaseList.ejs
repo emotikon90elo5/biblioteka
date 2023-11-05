@@ -8,15 +8,6 @@
   <link rel="shortcut icon" type="image/png" href="/imgs/logo.png" />
   <link rel="stylesheet" href="/assets/css/styles.min.css" />
   <script src="/assets/js/shelfList.js" defer></script>
-  <% if (typeof id !='undefined' ) { %>
-    <script >
-      let id = <%=id%>
-    </script>
-    <% } else{%>
-      <script >
-        let id = -1
-      </script>
-    <%}%>
 </head>
 
 <body>
@@ -103,6 +94,16 @@
             </div>
             <div class="card-body">
               <h5 class="card-title fw-semibold mb-4">Wybierz szafkę</h5>
+              <% if (typeof data.message !="undefined" && typeof data.messagetype !="undefined" ) { %>
+                <% if (data.messagetype=="err" ) { %>
+                  <div class="alert alert-danger" role="alert">
+                    <%=data.message%>
+                  </div>
+                  <% } else {%>
+                    <div class="alert alert-success" role="alert">
+                      <%=data.message%>
+                    </div>
+                    <% }} %>
               <div class="card">
 
                 <div class="card-body">
