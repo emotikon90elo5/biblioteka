@@ -12,10 +12,7 @@ router.use("/config", (req, res, next)=>{
   if(!req.session.SchoolID) return res.json({succes: false})
   next()
 }, ConfigRouter);
-router.use("/manage", (req, res, next)=>{
-  if(!req.session.SchoolID) return res.redirect('/auth')
-  next()
-}, ManageRouter.router);
+router.use("/manage", ManageRouter.router);
 router.all("*", (req, res) => {
   res.statusCode = 404
   res.json({ succes: false, data: "Not found" })

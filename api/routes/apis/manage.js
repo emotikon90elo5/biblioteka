@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const addRouter = require("./manage/add")
+const deleteRouter = require("./manage/delate")
 const { isNotUndifined, redirectWithText, getOldValue, getPupilID, getBookID, isRented } = require("./manage/manager")
 const { PrismaClient, Prisma } = require('@prisma/client');
 const prisma = new PrismaClient()
@@ -10,10 +11,20 @@ const notNumbers = /\D/g
 
 
 router.use(express.json());
-router.use("/add", addRouter)
+router.use("/add",(req, res, next)=>{
+  if(!req.session.SchoolID) return res.redirect('/auth')
+  next()
+}, addRouter)
+router.use("/delete",(req, res, next)=>{
+  if(!req.session.SchoolID) return res.json({succes: false, auth: false})
+  next()
+}, deleteRouter)
 
 
-router.post("/rent", async ({ session: { SchoolID }, body }, res) => {
+router.post("/rent",(req, res, next)=>{
+  if(!req.session.SchoolID) return res.json({succes: false, auth: false})
+  next()
+}, async ({ session: { SchoolID }, body }, res) => {
   const { localID, firstname, lastname, classID } = body;
   let message;
 
