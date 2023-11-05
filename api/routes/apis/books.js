@@ -108,6 +108,43 @@ router.get("/School/:id", async ({ params: { id } }, res) => {
 //       res.json({ succes: true, data: rows })
 //     })
 // })
-
+router.get("/find/School/:id", async ({ params: { id }, query: { title, author, publishinghouse, name } }, res) => {
+  let school
+  try {
+    books = await prisma.books.findMany({
+      where: {
+        shelf:{
+          bookcase:{
+            schoolsId:Number(id.replace(notNumbers,""))
+          }
+        },
+        title:{
+          contains:title?title:"",
+          
+        },
+        author:{
+          contains:author?author:"",
+        },
+        publishingHouse:{
+          contains:publishinghouse?publishinghouse:"",
+        },
+        type:{
+          name:{
+            contains:name?name:"",
+          }
+        }
+      },
+      include:{
+        type:true
+      }
+    })
+  }
+  catch (err) {
+    console.log(err)
+    return res.json({ succes: false })
+  }
+  if (books == null) return res.json({ succes: false })
+  res.json({ succes: true, data: books })
+})
 
 module.exports = router;

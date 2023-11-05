@@ -30,6 +30,19 @@ router.get("/school", async ({}, res) => {
   if (Schools == null) return res.json({ succes: false });
   return res.json({ succes: true, data: Schools });
 });
+router.get("/books/:id", async ({params: { id }}, res) => {
+  let Schools;
+  try {
+    Schools = await prisma.Schools.findMany({
+      
+    });
+  } catch (err) {
+    console.log(err);
+    return res.json({ succes: false });
+  }
+  if (Schools == null) return res.json({ succes: false });
+  return res.json({ succes: true, data: Schools });
+});
 router.all("*", (req, res) => {
   res.statusCode = 404
   res.json({ succes: false, data: "Not found" })

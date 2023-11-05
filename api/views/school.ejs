@@ -1,72 +1,126 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rent Book - Panel Zarządania - Dodaj książkę</title>
+    <link rel="shortcut icon" type="image/png" href="/imgs/logo.png" />
+    <link rel="stylesheet" href="/assets/css/styles.min.css" />
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Rent Book - Panel Zarządania - Dodaj książkę</title>
-  <link rel="shortcut icon" type="image/png" href="/imgs/logo.png" />
-  <link rel="stylesheet" href="/assets/css/styles.min.css" />
-  <script src="/assets/js/Books.js" defer></script>
+    <% if (typeof id !='undefined' ) { %>
+    <script>
+      const id = <%=id%>
+    </script>
+    <% } else{%>
+    <script>
+      const id = -1;
+    </script>
+    <%}%> <% if (typeof data.title !='undefined' ) { %>
+    <script>
+      const title = "<%=data.title%>";
+    </script>
+    <% } else{%>
+    <script>
+      const title = "";
+    </script>
+    <%}%> <% if (typeof data.author !='undefined' ) { %>
+    <script>
+      const author = "<%=data.author%>";
+    </script>
+    <% } else{%>
+    <script>
+      const author = "";
+    </script>
+    <%}%> <% if (typeof data.publishinghouse !='undefined' ) { %>
+    <script>
+      const publishinghouse = "<%=data.publishinghouse%>";
+    </script>
+    <% } else{%>
+    <script>
+      const publishinghouse = "";
+    </script>
+    <%}%> <% if (typeof data.name !='undefined' ) { %>
+    <script>
+      const name = "<%=data.name%>";
+    </script>
+    <% } else{%>
+    <script>
+      const name = "";
+    </script>
+    <%}%>
+  </head>
 
- 
-      <script defer>
-          let selected = -1
-      </script>
-      <% if (typeof id !='undefined' ) { %>
-        <script>
-          let id = <%=id%>
-            
-        </script>
-        <% } 
-        else{%>
-          <script>
-              let id = -1
-          </script>
-          <%}%>
-
-</head>
-
-<body>
-  
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title fw-semibold mb-4">wybierz książkę</h5>
+  <body>
+    <div
+      class="page-wrapper"
+      id="main-wrapper"
+      data-layout="vertical"
+      data-navbarbg="skin6"
+      data-sidebartype="full"
+      data-sidebar-position="fixed"
+      data-header-position="fixed"
+    >
+      <div
+        class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center"
+      >
+        <div class="d-flex align-items-center justify-content-center w-100">
+          <div class="row justify-content-center w-100">
+            <div class="col-md-20 col-lg-20 col-xxl-10">
               <div class="card">
-
                 <div class="card-body">
-                    
-                    <table   class="table table-bordered table-hover"> 
-                      <thead>
-                        <tr> 
-                          <th>
-                          Tytuł
-                          </th>
-                          <th>
-                            Autor
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody id="table">
-
-                      </tbody>
-                        
-                    </table>
-  
-                  
+                  <form >
+                <div class="row mb-2">
+                  <div class="col">
+                    <input type="text"name="title" id="title" class="form-control" placeholder="Tytuł">
+                  </div>
+                  <div class="col">
+                    <input type="text" name="author" id="author" class="form-control" placeholder="Autor">
+                  </div>
                 </div>
+                <div class="row mb-2">
+                  <div class="col">
+                    <input type="text" name="publishinghouse" id="publishinghouse" class="form-control" placeholder="Wydawnictwo">
+                  </div>
+                  <div class="col">
+                    <input type="text" name="name" id="type" class="form-control" placeholder="Gatunek">
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Szukaj!</button>
+              </form>
+              </div>
+                  <div class="card-body">
+                    <h5 class="card-title fw-semibold mb-4">
+                      Lista książek szkoły
+                    </h5>
+                    <div class="card">
+                      <div class="card-body">
+                        <table class="table table-bordered table-hover">
+                          <thead>
+                            <tr>
+                              <th>Tytuł</th>
+                              <th>Autor</th>
+                              <th>Wydawnictwo</th>
+                              <th>Typ</th>
+                            </tr>
+                          </thead>
+                          <tbody id="table"></tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                
               </div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
 
-  
-  <script src="/assets/libs/jquery/dist/jquery.min.js"></script>
-  <script src="/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="/assets/js/sidebarmenu.js"></script>
-  <script src="/assets/js/app.min.js"></script>
-  <script src="/assets/libs/simplebar/dist/simplebar.js"></script>
-  <!-- <script src="/assets/js/dashboard.js"></script> -->
-</body>
-
+    <script src="/assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/sidebarmenu.js"></script>
+    <script src="/assets/js/app.min.js"></script>
+    <script src="/assets/libs/simplebar/dist/simplebar.js"></script>
+    <script src="/assets/js/bookListUser.js"></script>
+  </body>
 </html>
