@@ -24,6 +24,14 @@ router.post("/shelf", async ({ body }, res) => {
     if (updateShelfValue != true) return redirectWithText(res, updateShelfValue, getOldValue(Object.assign(body, { messagetype: "err" })), "updateshelf/" + id);
     redirectWithText(res, "Pomyślnie zmieniono półkę", getOldValue({ messagetype: "success" }), "updateshelf/" + id)
 })
+router.post("/bookcase", async ({ body }, res) => {
+    const { name, id } = body
+    if (isNotUndifined(body)) return redirectWithText(res, 'Nie podałeś pełnych danych', getOldValue(Object.assign(body, { messagetype: "err" })), "updatebookcase/" + id);
+    const updateBookcaseValue = await updateBookcase(name, Number(id.replace(notNumbers, "")))
+    if (updateBookcaseValue != true) return redirectWithText(res, updateBookcaseValue, getOldValue(Object.assign(body, { messagetype: "err" })), "updatebookcase/" + id);
+    redirectWithText(res, "Pomyślnie zmieniono szafkę", getOldValue({ messagetype: "success" }), "updatebookcase/" + id)
+})
+
 
 
 const updateBook = (title, author, publishingHouse, ageCategory, type, shelf, localID, id) => {
@@ -56,6 +64,25 @@ const updateShelf = (name, id) => {
         let book;
         try {
             book = await prisma.shelves.update({
+                data: {
+                    name: name
+                },
+                where: {
+                    id: id
+                }
+            })
+        } catch (err) {
+            return res(errHanler(err))
+        }
+        return res(true)
+    })
+}
+
+const updateBookcase = (name, id) => {
+    return new Promise(async (res) => {
+        let book;
+        try {
+            book = await prisma.bookcases.update({
                 data: {
                     name: name
                 },
