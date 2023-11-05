@@ -38,7 +38,7 @@ router.get("/updateBook/:id", (req, res) => {
     res.render("admin/updateBook",{id:req.params.id, data: req.query})
 })
 router.get("/pupilList", (req, res) => {
-    res.redirect("/admin/pupilList/1")
+    res.redirect("/admin/classlist")
 })
 router.get("/pupilList/:id", (req, res) => {
     res.render("admin/pupilList",{id:req.params.id})
