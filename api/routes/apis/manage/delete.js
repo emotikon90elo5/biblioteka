@@ -35,6 +35,14 @@ router.delete("/bookcase", async ({ body, session: { SchoolID } }, res) => {
     res.json({ succes: true })
 })
 
+router.delete("/pupil", async ({ body, session: { SchoolID } }, res) => {
+    const { id } = body
+    if (isNotUndifined(body)) return res.json({ succes: false, message: "Bad request" });
+    const deletePupilValue = await deletePupil(Number(id.replace(notNumbers, "")), SchoolID)
+    if (deletePupilValue != true) return res.json({ succes: false, message: deletePupilValue });
+    res.json({ succes: true })
+})
+
 
 const deleteBook = (id, schoolsId) => {
     return new Promise(async (res) => {
@@ -101,7 +109,7 @@ const deleteBookcase = (id, schoolsId) => {
             await prisma.bookcases.delete({
                 where: {
                     id: id,
-                    schoolsId:schoolsId
+                    schoolsId: schoolsId
                 },
             })
         } catch (err) {
@@ -116,6 +124,33 @@ const deleteBookcase = (id, schoolsId) => {
     })
 }
 
+const deletePupil = (id, schoolsId) => {
+    return new Promise(async (res) => {
+        try {
+            await prisma.rents.deleteMany({
+                where: {
+                    pupils: {
+                        id: id,
+                        class: {
+                            schoolsId: schoolsId
+                        }
+                    }
+                },
+            })
+            await prisma.pupils.delete({
+                where: {
+                    id: id,
+                    class: {
+                        schoolsId: schoolsId
+                    }
+                },
+            })
+        } catch (err) {
+            return res(errHanler(err))
+        }
+        return res(true)
+    })
+}
 
 
 

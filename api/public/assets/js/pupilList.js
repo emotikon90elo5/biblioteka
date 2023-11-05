@@ -1,9 +1,9 @@
 let closePopup = document.getElementById("closePopup");
 let PopupCancel = document.getElementById("Cancel");
 let PopupCommit = document.getElementById("Commit");
+let popupText = document.getElementById("exampleModalLongTitleContent");
 async function shelf() {
   let table = document.getElementById("table");
-  let popupText = document.getElementById("exampleModalLongTitleContent");
   const response = await fetch(`/api/config/classpupils/${id}`, {
     credentials: "include",
   });
@@ -11,7 +11,7 @@ async function shelf() {
   document.getElementById("name").value = jsona.data.name
   document.getElementById("headerName").innerText += ` ${jsona.data.name}`;
   await jsona.data.pupils.forEach((e) => {
-    
+
     let tr = document.createElement("tr");
 
     let td1 = document.createElement("td");
@@ -30,8 +30,8 @@ async function shelf() {
       popupRemove();
     };
     function popupRemove() {
-      popupText.innerHTML = `<b>${e.title}</b>`;
-      popupText.setAttribute("value",e.id)
+      popupText.innerHTML = `<b>${e.firstName} ${e.lastName}</b>`;
+      popupText.setAttribute("value", e.id)
 
       $("#exampleModalCenter").modal("show");
     }
@@ -62,14 +62,22 @@ closePopup.addEventListener("click", () => {
 PopupCancel.addEventListener("click", () => {
   $("#exampleModalCenter").modal("hide");
 });
- PopupCommit.addEventListener("click", async() => {
+PopupCommit.addEventListener("click", async () => {
   $("#exampleModalCenter").modal("hide");
-  const response = await fetch(`/api/menage/delate/book`, {
-      credentials: "include",
-      method:"delete",
-      body:{
-        id:popupText.getAttribute("value")
-      }
-    });
-    
+  const response = await fetch(`/api/manage/delete/pupil`, {
+    credentials: "include",
+    method: "delete",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      id: popupText.getAttribute("value")
+    }),
+  });
+  const json = await response.json()
+  if (!json.succes) {
+    window.location.href = `/admin/pupilList/${id}/?message=${json.message}&messagetype=err`
+  } else {
+    window.location.href = `/admin/pupilList/${id}`
+  }
 });
