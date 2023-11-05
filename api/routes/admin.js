@@ -49,13 +49,13 @@ router.get("/updatePupil/:pupilId", (req, res) => {
 router.get("/classList", (req, res) => {
     res.render("admin/classList")
 })
-router.get("/shelfList", (req, res) => {
-    res.render("admin/shelfList")
+router.get("/bookcaseList", (req, res) => {
+    res.render("admin/bookcaseList")
 })
 router.get("/updateShelf/:shelfId", (req, res) => {
-    res.render("admin/updateShelf",{shelfId:req.params.shelfId})
+    res.render("admin/updateShelf",{bookcaseId:req.params.bookcaseId})
 })
 router.get("/updateBookcase/:bookcaseId", (req, res) => {
-    res.render("admin/updateBookcase",{bookcaseId:req.params.bookcaseId})
+    res.render("admin/updateBookcase",{shelfId:req.params.shelfId})
 })
 module.exports = router;

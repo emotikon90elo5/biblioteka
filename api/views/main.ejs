@@ -5,11 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>główna</title>
-    <link rel="stylesheet" href="/stylesheets/nav.css">
-    <link rel="stylesheet" href="/stylesheets/style.css">
+    
+    <link rel="stylesheet" href="../assets/css/styles.min.css" />
 </head>
 <body>  
     
-    <%- include('modules/ButtonLink',{href:"/auth",text:logged ? "Panel zarzdzania":"Zaloguj się!"}); -%>
+    <a href="/auth" class="btn btn-primary float-right position-absolute top-0 end-0 mt-3 me-3 btn-lg">
+        Zaloguj!
+      </a>
 </body>
 </html>

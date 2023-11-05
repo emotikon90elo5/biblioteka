@@ -51,7 +51,7 @@ async function shelf() {
     td4.append(button);
 
     let updateHref = document.createElement("a");
-    updateHref.href = `/admin/updatebookcase/${e.id}`;
+    updateHref.href = `/admin/updateShelf/${e.id}`;
     let update = document.createElement("i");
     update.classList.add("ti");
     update.classList.add("ti-pencil");
