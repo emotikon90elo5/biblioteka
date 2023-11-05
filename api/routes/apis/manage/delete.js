@@ -3,6 +3,7 @@ const router = express.Router();
 const { isNotUndifined, redirectWithText, getOldValue, isRented } = require("./manager")
 const { PrismaClient, Prisma } = require('@prisma/client');
 const errHanler = require("../../errorHandler");
+const { PrismaClientKnownRequestError } = require("@prisma/client/runtime/library");
 const prisma = new PrismaClient()
 
 router.use(express.json())
@@ -18,6 +19,13 @@ router.delete("/book", async ({ body, session: { SchoolID } }, res) => {
     res.json({ succes: true })
 })
 
+router.delete("/shelf", async ({ body, session: { SchoolID } }, res) => {
+    const { id } = body
+    if (isNotUndifined(body)) return res.json({ succes: false, message: "Bad request" });
+    const delateShelfValue = await deleteShelf(Number(id.replace(notNumbers, "")), SchoolID)
+    if (delateShelfValue != true) return res.json({ succes: false, message: delateShelfValue });
+    res.json({ succes: true })
+})
 
 const deleteBook = (id, schoolsId) => {
     return new Promise(async (res) => {
@@ -49,6 +57,30 @@ const deleteBook = (id, schoolsId) => {
                 }
             })
         } catch (err) {
+            return res(errHanler(err))
+        }
+        return res(true)
+    })
+}
+
+const deleteShelf = (id, schoolsId) => {
+    return new Promise(async (res) => {
+        try {
+            await prisma.shelves.delete({
+                where: {
+                    id: id,
+                    bookcase: {
+                        schoolsId: schoolsId
+                    }
+                },
+            })
+        } catch (err) {
+            if(err instanceof PrismaClientKnownRequestError){
+                if(err.code=='P2003' && err.meta.field_name=='shelvesId')
+                {
+                    return res("Nie możesz usunąć półki na której są książki!")
+                }
+            }
             return res(errHanler(err))
         }
         return res(true)
