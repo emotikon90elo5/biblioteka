@@ -1,9 +1,10 @@
 let closePopup = document.getElementById("closePopup");
 let PopupCancel = document.getElementById("Cancel");
 let PopupCommit = document.getElementById("Commit");
+let popupText = document.getElementById("exampleModalLongTitleContent");
 async function shelf() {
   let table = document.getElementById("table");
-  let popupText = document.getElementById("exampleModalLongTitleContent");
+
   const response = await fetch("http://localhost:4000/api/config/books", {
     credentials: "include",
   });
@@ -32,7 +33,7 @@ async function shelf() {
     };
     function popupRemove() {
       popupText.innerHTML = `<b>${e.title}</b>`;
-      popupText.setAttribute("value",e.id)
+      popupText.setAttribute("value", e.id)
       $("#exampleModalCenter").modal("show");
     }
     let remove = document.createElement("i");
@@ -62,14 +63,17 @@ closePopup.addEventListener("click", () => {
 PopupCancel.addEventListener("click", () => {
   $("#exampleModalCenter").modal("hide");
 });
- PopupCommit.addEventListener("click", async() => {
+PopupCommit.addEventListener("click", async () => {
   $("#exampleModalCenter").modal("hide");
-  const response = await fetch(`http://localhost:4000/api/menage/delate/book`, {
-      credentials: "include",
-      method:"delete",
-      body:{
-        id:popupText.getAttribute("value")
-      }
-    });
-    
+  const response = await fetch(`http://localhost:4000/api/manage/delete/book`, {
+    credentials: "include",
+    method: "delete",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      id: popupText.getAttribute("value")
+    })
+  });
+  window.location.reload();
 });
