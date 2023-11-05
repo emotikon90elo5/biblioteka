@@ -172,7 +172,7 @@ router.get(
     return res.json({ succes: true, data: pupils });
   }
 );
-router.get("/shelf/:id", async ({ session: { SchoolID },params: { id } }, res) => {
+router.get("/shelf:id", async ({ session: { SchoolID },params: { id } }, res) => {
   let shelf;
   try {
     shelf = await prisma.bookcases.findFirst({

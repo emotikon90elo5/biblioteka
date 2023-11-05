@@ -4,6 +4,9 @@ var BooksRouter = require("./apis/books")
 var AuthRouter = require("./apis/auth")
 var ConfigRouter = require("./apis/config")
 var ManageRouter = require("./apis/manage")
+const { PrismaClient, Prisma } = require("@prisma/client");
+const prisma = new PrismaClient();
+
 require('dotenv').config();
 
 router.use("/books", BooksRouter);
@@ -13,6 +16,20 @@ router.use("/config", (req, res, next)=>{
   next()
 }, ConfigRouter);
 router.use("/manage", ManageRouter.router);
+
+router.get("/school", async ({}, res) => {
+  let Schools;
+  try {
+    Schools = await prisma.Schools.findMany({
+      
+    });
+  } catch (err) {
+    console.log(err);
+    return res.json({ succes: false });
+  }
+  if (Schools == null) return res.json({ succes: false });
+  return res.json({ succes: true, data: Schools });
+});
 router.all("*", (req, res) => {
   res.statusCode = 404
   res.json({ succes: false, data: "Not found" })

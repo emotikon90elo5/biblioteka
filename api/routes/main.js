@@ -22,4 +22,7 @@ router.get("/locate", ({session: {SchoolID}}, res) => {
   res.render("locate", {logged: SchoolID ? true : false })
   
 })
+router.get("/school/:id", (req, res) => {
+  res.render("school",{id:req.params.id, data: req.query})
+})
 module.exports = router;
