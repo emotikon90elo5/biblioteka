@@ -1,6 +1,6 @@
 async function update() {
     let table = document.getElementById("table");
-    const response = await fetch(`http://localhost:4000/api/config/shelf/${shelfId}`, {
+    const response = await fetch(`http://localhost:4000/api/config/shelf/${bookcaseId}`, {
       credentials: "include",
     });
     let jsona = await response.json();
@@ -17,7 +17,7 @@ let PopupCommit = document.getElementById("Commit");
 async function shelf() {
   let table = document.getElementById("table");
   let popupText = document.getElementById("exampleModalLongTitleContent");
-  const response = await fetch(`http://localhost:4000/api/config/shelf/${shelfId}`, {
+  const response = await fetch(`http://localhost:4000/api/config/shelf/${bookcaseId}`, {
     credentials: "include",
   });
   let jsona = await response.json();

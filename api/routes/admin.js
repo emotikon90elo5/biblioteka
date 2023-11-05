@@ -53,9 +53,9 @@ router.get("/bookcaseList", (req, res) => {
     res.render("admin/bookcaseList")
 })
 router.get("/updateShelf/:shelfId", (req, res) => {
-    res.render("admin/updateShelf",{bookcaseId:req.params.bookcaseId})
+    res.render("admin/updateShelf",{shelfId:req.params.shelfId, data: req.query})
 })
 router.get("/updateBookcase/:bookcaseId", (req, res) => {
-    res.render("admin/updateBookcase",{shelfId:req.params.shelfId})
+    res.render("admin/updateBookcase",{bookcaseId:req.params.bookcaseId, data: req.query})
 })
 module.exports = router;

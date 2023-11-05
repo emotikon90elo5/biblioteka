@@ -8,24 +8,15 @@
   <link rel="shortcut icon" type="image/png" href="/imgs/logo.png" />
   <link rel="stylesheet" href="/assets/css/styles.min.css" />
   <script src="/assets/js/updateShelf.js" defer></script>
-  <% if (typeof id !='undefined' ) { %>
-    <script>
-      let selected = <%=id%>
-    </script>
-    <% } else{%>
-      <script defer>
-          let selected = -1
-      </script>
-      <%}%>
-      <% if (typeof pupilId !='undefined' ) { %>
+      <% if (typeof bookcaseId !='undefined' ) { %>
         <script>
-          let shelfId = <%=shelfId%>
+          let bookcaseId = <%=bookcaseId%>
             
         </script>
         <% } 
         else{%>
           <script>
-              let shelfId = -1
+              let bookcaseId = -1
           </script>
           <%}%>
 
@@ -99,11 +90,22 @@
               <h5 id="headerName" class="card-title fw-semibold mb-4">Aktualizuj szafkę</h5>
               <div class="card">
                 <div class="card-body">
-                  <form action="/api/books/rent" method="post">
+                  <% if (typeof data.message !="undefined" && typeof data.messagetype !="undefined" ) { %>
+                    <% if (data.messagetype=="err" ) { %>
+                      <div class="alert alert-danger" role="alert">
+                        <%=data.message%>
+                      </div>
+                      <% } else {%>
+                        <div class="alert alert-success" role="alert">
+                          <%=data.message%>
+                        </div>
+                        <% }} %>
+                  <form action="/api/manage/update/bookcase" method="post">
                     <div class="mb-3">
                       <label for="name" class="form-label">Nazwa</label>
                       <input type="text" class="form-control" id="name" name="name"> 
                     </div>
+                    <input type="hidden" name="id" value="<%=bookcaseId%>">
                     <button type="submit" class="btn btn-primary">Zmień</button>
                   </form>
                 </div>
