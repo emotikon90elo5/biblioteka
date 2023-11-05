@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const addRouter = require("./manage/add")
+const updateRouter = require("./manage/update")
 const deleteRouter = require("./manage/delate")
 const { isNotUndifined, redirectWithText, getOldValue, getPupilID, getBookID, isRented } = require("./manage/manager")
 const { PrismaClient, Prisma } = require('@prisma/client');
@@ -11,18 +12,24 @@ const notNumbers = /\D/g
 
 
 router.use(express.json());
-router.use("/add",(req, res, next)=>{
-  if(!req.session.SchoolID) return res.redirect('/auth')
+router.use("/add", (req, res, next) => {
+  if (!req.session.SchoolID) return res.redirect('/auth')
   next()
 }, addRouter)
-router.use("/delete",(req, res, next)=>{
-  if(!req.session.SchoolID) return res.json({succes: false, auth: false})
+
+router.use("/update", (req, res, next) => {
+  if (!req.session.SchoolID) return res.redirect('/auth')
+  next()
+}, updateRouter)
+
+router.use("/delete", (req, res, next) => {
+  if (!req.session.SchoolID) return res.json({ succes: false, auth: false })
   next()
 }, deleteRouter)
 
 
-router.post("/rent",(req, res, next)=>{
-  if(!req.session.SchoolID) return res.json({succes: false, auth: false})
+router.post("/rent", (req, res, next) => {
+  if (!req.session.SchoolID) return res.json({ succes: false, auth: false })
   next()
 }, async ({ session: { SchoolID }, body }, res) => {
   const { localID, firstname, lastname, classID } = body;
@@ -73,10 +80,10 @@ const rent = async (localID, firstName, lastName, classID, schoolID) => {
     if (booksId == "dberr" || booksId == "bookNotExist") return res(booksId)
     try {
       create = await prisma.rents.create({ data: { pupilsId, booksId } });
-    }catch(err){
+    } catch (err) {
       return res("dberr")
     }
-    if(create!=null) res(true)
+    if (create != null) res(true)
     else res("dberr")
   })
 }
