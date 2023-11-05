@@ -9,15 +9,9 @@
   <link rel="stylesheet" href="/assets/css/styles.min.css" />
   <script src="/assets/js/classes.js" defer></script>
   <script src="/assets/js/updatePupil.js" defer></script>
-  <% if (typeof id !='undefined' ) { %>
-    <script>
-      let selected = <%=id%>
-    </script>
-    <% } else{%>
       <script defer>
           let selected = -1
       </script>
-      <%}%>
       <% if (typeof pupilId !='undefined' ) { %>
         <script>
           let pupilId = <%=pupilId%>
@@ -100,7 +94,17 @@
               </div>
             </div>
                 <div class="card-body">
-                  <form action="/api/books/rent" method="post">
+                  <% if (typeof data.message !="undefined" && typeof data.messagetype !="undefined" ) { %>
+                    <% if (data.messagetype=="err" ) { %>
+                      <div class="alert alert-danger" role="alert">
+                        <%=data.message%>
+                      </div>
+                      <% } else {%>
+                        <div class="alert alert-success" role="alert">
+                          <%=data.message%>
+                        </div>
+                        <% }} %>
+                  <form action="/api/manage/update/pupil" method="post">
                     <div class="mb-3">
                       <label for="firstName" class="form-label">Imie</label>
                       <input type="text" class="form-control" id="firstName" name="firstName"> 
@@ -114,6 +118,7 @@
                       <select id="classID" name="classID" class="form-control">
                       </select> 
                     </div>
+                    <input type="hidden" name="id" value="<%=pupilId%>">
                     <button type="submit" class="btn btn-primary">Zmień</button>
                   </form>
                 </div>

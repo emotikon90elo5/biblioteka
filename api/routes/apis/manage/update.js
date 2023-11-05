@@ -38,7 +38,13 @@ router.post("/class", async ({ body }, res) => {
     if (updateClassValue != true) return redirectWithText(res, updateClassValue, getOldValue(Object.assign(body, { messagetype: "err" })), "pupillist/" + id);
     redirectWithText(res, "Pomyślnie zmieniono klasę", getOldValue({ messagetype: "success" }), "pupillist/" + id)
 })
-
+router.post("/pupil", async ({ body }, res) => {
+    const { firstName, lastName, classID, id } = body
+    if (isNotUndifined(body)) return redirectWithText(res, 'Nie podałeś pełnych danych', getOldValue(Object.assign(body, { messagetype: "err" })), "updatepupil/" + id);
+    const updatePupilValue = await updatePupil(firstName, lastName, Number(classID.replace(notNumbers, "")), Number(id.replace(notNumbers, "")))
+    if (updatePupilValue != true) return redirectWithText(res, updatePupilValue, getOldValue(Object.assign(body, { messagetype: "err" })), "updatepupil/" + id);
+    redirectWithText(res, "Pomyślnie zmieniono klasę", getOldValue({ messagetype: "success" }), "updatepupil/" + id)
+})
 
 const updateBook = (title, author, publishingHouse, ageCategory, type, shelf, localID, id) => {
     return new Promise(async (res) => {
@@ -110,6 +116,27 @@ const updateClass = (name, id) => {
             classes = await prisma.class.update({
                 data: {
                     name: name
+                },
+                where: {
+                    id: id
+                }
+            })
+        } catch (err) {
+            return res(errHanler(err))
+        }
+        return res(true)
+    })
+}
+
+const updatePupil = (firstName, lastname, classId , id) => {
+    return new Promise(async (res) => {
+        let pupil;
+        try {
+            pupil = await prisma.pupils.update({
+                data: {
+                    firstName: firstName,
+                    lastName: lastname,
+                    classId: classId
                 },
                 where: {
                     id: id
