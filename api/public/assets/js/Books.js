@@ -42,7 +42,7 @@ async function shelf() {
     td4.append(button);
 
     let updateHref = document.createElement("a");
-    updateHref.href = `/admin/book/update/${e.id}`;
+    updateHref.href = `/admin/updatebook/${e.id}`;
     let update = document.createElement("i");
     update.classList.add("ti");
     update.classList.add("ti-pencil");
