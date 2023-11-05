@@ -52,4 +52,10 @@ router.get("/classList", (req, res) => {
 router.get("/shelfList", (req, res) => {
     res.render("admin/shelfList")
 })
+router.get("/updateShelf/:shelfId", (req, res) => {
+    res.render("admin/updateShelf",{shelfId:req.params.shelfId})
+})
+router.get("/updateBookcase/:bookcaseId", (req, res) => {
+    res.render("admin/updateBookcase",{bookcaseId:req.params.bookcaseId})
+})
 module.exports = router;

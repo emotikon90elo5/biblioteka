@@ -29,6 +29,7 @@ async function shelf() {
     };
     function popupRemove() {
       popupText.innerHTML = `<b>${e.title}</b>`;
+      popupText.setAttribute("value",e.id)
 
       $("#exampleModalCenter").modal("show");
     }
@@ -61,9 +62,12 @@ PopupCancel.addEventListener("click", () => {
 });
  PopupCommit.addEventListener("click", async() => {
   $("#exampleModalCenter").modal("hide");
-  const response = await fetch("http://localhost:4000/api/menage/delate/book", {
+  const response = await fetch(`http://localhost:4000/api/menage/delate/book`, {
       credentials: "include",
-      method:"delete"
+      method:"delete",
+      body:{
+        id:popupText.getAttribute("value")
+      }
     });
     
 });

@@ -42,7 +42,7 @@ async function shelf() {
     td4.append(button);
 
     let updateHref = document.createElement("a");
-    updateHref.href = `/admin/updatepupil/${e.id}`;
+    updateHref.href = `/admin/updateshelf/${e.id}`;
     let update = document.createElement("i");
     update.classList.add("ti");
     update.classList.add("ti-pencil");
@@ -64,9 +64,12 @@ PopupCancel.addEventListener("click", () => {
 });
  PopupCommit.addEventListener("click", async() => {
   $("#exampleModalCenter").modal("hide");
-  const response = await fetch(`http://localhost:4000/api/menage/delate/book/${popupText.getAttribute("value")}`, {
+  const response = await fetch(`http://localhost:4000/api/menage/delate/book`, {
       credentials: "include",
-      method:"delete"
+      method:"delete",
+      body:{
+        id:popupText.getAttribute("value")
+      }
     });
     
 });

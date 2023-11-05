@@ -172,4 +172,33 @@ router.get(
     return res.json({ succes: true, data: pupils });
   }
 );
+router.get("/shelf/:id", async ({ session: { SchoolID },params: { id } }, res) => {
+  let shelf;
+  try {
+    shelf = await prisma.bookcases.findFirst({
+      where: {
+        id:Number(id.replace(notNumbers, "")),
+        schoolsId: SchoolID,
+      },
+      include: {
+        shelves: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        _count: {
+          select: {
+            shelves: true,
+          },
+        },
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return res.json({ succes: false });
+  }
+  if (shelf == null) return res.json({ succes: false });
+  return res.json({ succes: true, data: shelf });
+});
 module.exports = router;

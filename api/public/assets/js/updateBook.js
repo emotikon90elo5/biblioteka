@@ -6,6 +6,8 @@ async function update() {
   });
   let jsona = await response.json();
   console.log(jsona);
+  
+  document.getElementById("headerName").innerText += ` ${jsona.data.title}`;
   document.getElementById("title").value = jsona.data.title;
   document.getElementById("author").value=jsona.data.author
   document.getElementById("publishingHouse").value=jsona.data.publishingHouse

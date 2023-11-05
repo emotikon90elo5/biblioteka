@@ -1,27 +1,35 @@
+async function update() {
+    let table = document.getElementById("table");
+    const response = await fetch(`http://localhost:4000/api/config/shelf/${shelfId}`, {
+      credentials: "include",
+    });
+    let jsona = await response.json();
+    
+    document.getElementById("headerName").innerText += ` ${jsona.data.name}`;
+    document.getElementById("name").value = jsona.data.name;
+  }
+  update();
+
+
 let closePopup = document.getElementById("closePopup");
 let PopupCancel = document.getElementById("Cancel");
 let PopupCommit = document.getElementById("Commit");
 async function shelf() {
   let table = document.getElementById("table");
   let popupText = document.getElementById("exampleModalLongTitleContent");
-  const response = await fetch("http://localhost:4000/api/config/books", {
+  const response = await fetch(`http://localhost:4000/api/config/shelf/${shelfId}`, {
     credentials: "include",
   });
   let jsona = await response.json();
-  await jsona.data.forEach((e) => {
+  await jsona.data.shelves.forEach((e) => {
+    
     let tr = document.createElement("tr");
 
     let td1 = document.createElement("td");
-    td1.innerText = e.title;
+    td1.innerText = e.name;
     tr.append(td1);
 
-    let td2 = document.createElement("td");
-    td2.innerText = e.author;
-    tr.append(td2);
-
-    let td3 = document.createElement("td");
-    td3.innerText = e.localid;
-    tr.append(td3);
+    
 
     let td4 = document.createElement("td");
 
@@ -31,8 +39,9 @@ async function shelf() {
       popupRemove();
     };
     function popupRemove() {
-      popupText.innerHTML = `<b>${e.title}</b>`;
+      popupText.innerHTML = `<b>${e.name}</b>`;
       popupText.setAttribute("value",e.id)
+
       $("#exampleModalCenter").modal("show");
     }
     let remove = document.createElement("i");
@@ -42,7 +51,7 @@ async function shelf() {
     td4.append(button);
 
     let updateHref = document.createElement("a");
-    updateHref.href = `/admin/book/update/${e.id}`;
+    updateHref.href = `/admin/updatebookcase/${e.id}`;
     let update = document.createElement("i");
     update.classList.add("ti");
     update.classList.add("ti-pencil");
