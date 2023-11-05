@@ -7,29 +7,16 @@
   <title>Rent Book - Panel Zarządania - Dodaj książkę</title>
   <link rel="shortcut icon" type="image/png" href="/imgs/logo.png" />
   <link rel="stylesheet" href="/assets/css/styles.min.css" />
-  <script src="/assets/js/addBook.js" defer></script>
   <script src="/assets/js/updateBook.js" defer></script>
-
   <% if (typeof id !='undefined' ) { %>
-    <script >
+    <script>
       let id = <%=id%>
     </script>
     <% } else{%>
-      <script >
-        let id = -1
-      </script>
-    <%}%>
-    <% if (typeof type !='undefined' && typeof shelf !='undefined' ) { %>
       <script>
-        let selectedtype = <%=type%>
-          let selectedshelf = <%=shelf %>
+          let id = -1
       </script>
-      <% } else{%>
-        <script>
-            let selectedtype = -1
-          let selectedshelf = -1
-        </script>
-        <%}%>
+      <%}%>
 </head>
 
 <body>
@@ -82,7 +69,17 @@
               <h5 id="headerName" class="card-title fw-semibold mb-4">Aktualizuj książkę</h5>
               <div class="card">
                 <div class="card-body">
-                  <form action="/api/manage/addBook" method="post">
+                  <% if (typeof data.message !="undefined" && typeof data.messagetype !="undefined" ) { %>
+                    <% if (data.messagetype=="err" ) { %>
+                      <div class="alert alert-danger" role="alert">
+                        <%=data.message%>
+                      </div>
+                      <% } else {%>
+                        <div class="alert alert-success" role="alert">
+                          <%=data.message%>
+                        </div>
+                        <% }} %>
+                  <form action="/api/manage/update/book" method="post">
                     <div class="mb-3">
                       <label for="title" class="form-label">Tytuł</label>
                       <input type="text" class="form-control" id="title" name="title">
@@ -113,6 +110,7 @@
                       <label for="localID" class="form-label">Kod Książki</label>
                       <input type="number" class="form-control" id="localID" name="localID">
                     </div>
+                    <input type="hidden" name="id" value="<%=id %>">
                     <button type="submit" class="btn btn-primary">Zmień</button>
                   </form>
                 </div>
