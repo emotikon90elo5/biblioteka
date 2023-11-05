@@ -31,7 +31,13 @@ router.post("/bookcase", async ({ body }, res) => {
     if (updateBookcaseValue != true) return redirectWithText(res, updateBookcaseValue, getOldValue(Object.assign(body, { messagetype: "err" })), "updatebookcase/" + id);
     redirectWithText(res, "Pomyślnie zmieniono szafkę", getOldValue({ messagetype: "success" }), "updatebookcase/" + id)
 })
-
+router.post("/class", async ({ body }, res) => {
+    const { name, id } = body
+    if (isNotUndifined(body)) return redirectWithText(res, 'Nie podałeś pełnych danych', getOldValue(Object.assign(body, { messagetype: "err" })), "pupillist/" + id);
+    const updateClassValue = await updateClass(name, Number(id.replace(notNumbers, "")))
+    if (updateClassValue != true) return redirectWithText(res, updateClassValue, getOldValue(Object.assign(body, { messagetype: "err" })), "pupillist/" + id);
+    redirectWithText(res, "Pomyślnie zmieniono klasę", getOldValue({ messagetype: "success" }), "pupillist/" + id)
+})
 
 
 const updateBook = (title, author, publishingHouse, ageCategory, type, shelf, localID, id) => {
@@ -61,9 +67,9 @@ const updateBook = (title, author, publishingHouse, ageCategory, type, shelf, lo
 
 const updateShelf = (name, id) => {
     return new Promise(async (res) => {
-        let book;
+        let shelf;
         try {
-            book = await prisma.shelves.update({
+            shelf = await prisma.shelves.update({
                 data: {
                     name: name
                 },
@@ -80,9 +86,28 @@ const updateShelf = (name, id) => {
 
 const updateBookcase = (name, id) => {
     return new Promise(async (res) => {
-        let book;
+        let bookcase;
         try {
-            book = await prisma.bookcases.update({
+            bookcase = await prisma.bookcases.update({
+                data: {
+                    name: name
+                },
+                where: {
+                    id: id
+                }
+            })
+        } catch (err) {
+            return res(errHanler(err))
+        }
+        return res(true)
+    })
+}
+
+const updateClass = (name, id) => {
+    return new Promise(async (res) => {
+        let classes;
+        try {
+            classes = await prisma.class.update({
                 data: {
                     name: name
                 },
