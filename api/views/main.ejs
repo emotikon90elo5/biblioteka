@@ -10,6 +10,6 @@
 </head>
 <body>  
     
-    <%- include('modules/Nav', {logged: logged}); -%>
+    <%- include('modules/ButtonLink',{href:"/auth",text:logged ? "Panel zarzdzania":"Zaloguj się!"}); -%>
 </body>
 </html>

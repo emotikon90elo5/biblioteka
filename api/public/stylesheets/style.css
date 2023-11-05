@@ -1,5 +1,5 @@
 :root {
-  --white2: #dadada;
+  --white2: #34bfe2;
   --dark-blue: rgb(20, 150, 180);
   --black: #111111;
   --black-hover: #000;
@@ -11,7 +11,10 @@
   padding: 0;
   margin: 0;
 }
-
+.button-link{
+  align-self: self-end;
+  
+}
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   display: flex;
