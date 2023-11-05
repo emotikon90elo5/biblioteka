@@ -50,7 +50,7 @@ router.get("/classList", (req, res) => {
     res.render("admin/classList")
 })
 router.get("/bookcaseList", (req, res) => {
-    res.render("admin/bookcaseList")
+    res.render("admin/bookcaseList", {data: req.query})
 })
 router.get("/updateShelf/:shelfId", (req, res) => {
     res.render("admin/updateShelf",{shelfId:req.params.shelfId, data: req.query})

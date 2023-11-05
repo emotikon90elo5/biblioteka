@@ -11,7 +11,6 @@ async function shelf() {
   let jsona = await response.json();
   
   await jsona.data.forEach((e) => {
-    console.log(e)
     let tr = document.createElement("tr");
 
     let td1 = document.createElement("td");
@@ -64,12 +63,21 @@ PopupCancel.addEventListener("click", () => {
 });
  PopupCommit.addEventListener("click", async() => {
   $("#exampleModalCenter").modal("hide");
-  const response = await fetch(`http://localhost:4000/api/menage/delate/book`, {
-      credentials: "include",
-      method:"delete",
-      body:{
-        id:popupText.getAttribute("value")
-      }
-    });
+  const response = await fetch(`http://localhost:4000/api/manage/delete/bookcase`, {
+    credentials: "include",
+    method: "delete",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      id: popupText.getAttribute("value")
+    }),
+  });
+  const json = await response.json()
+  if (!json.succes) {
+    window.location.href=`/admin/bookcaseList/?message=${json.message}&messagetype=err`
+  } else {
+    window.location.href=`/admin/bookcaseList/`
+  }
     
 });
