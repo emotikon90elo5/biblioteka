@@ -13,9 +13,14 @@ router.post("/login", async (req, res) => {
     if (!username || !password) {
         return res.redirect("/auth?error=Nie podałeś nazwy użytkownika i/lub hasła");
     }
-    const user = await prisma.accounts.findFirstOrThrow({
-        where: { login: sha512(username) },
-    })
+    let user
+    try {
+        user = await prisma.accounts.findFirstOrThrow({
+            where: { login: sha512(username) },
+        })
+    } catch (err) {
+
+    }
     if (user == null) return res.redirect("/auth?error=Podałeś złe dane bądź konto nie istnieje");
     if (sha512.hmac("963852741pol" + user.id + 1, password) == user.pass) {
         req.session.UserID = user.id;
