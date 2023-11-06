@@ -1,6 +1,6 @@
 async function update() {
   let table = document.getElementById("table");
-  const response = await fetch(`http://localhost:4000/api/config/shelf/${bookcaseId}`, {
+  const response = await fetch(`/api/config/shelf/${bookcaseId}`, {
     credentials: "include",
   });
   let jsona = await response.json();
@@ -17,7 +17,7 @@ let PopupCommit = document.getElementById("Commit");
 let popupText = document.getElementById("exampleModalLongTitleContent");
 async function shelf() {
   let table = document.getElementById("table");
-  const response = await fetch(`http://localhost:4000/api/config/shelf/${bookcaseId}`, {
+  const response = await fetch(`/api/config/shelf/${bookcaseId}`, {
     credentials: "include",
   });
   let jsona = await response.json();
@@ -73,7 +73,7 @@ PopupCancel.addEventListener("click", () => {
 });
 PopupCommit.addEventListener("click", async () => {
   $("#exampleModalCenter").modal("hide");
-  const response = await fetch(`http://localhost:4000/api/manage/delete/shelf`, {
+  const response = await fetch(`/api/manage/delete/shelf`, {
     credentials: "include",
     method: "delete",
     headers: {

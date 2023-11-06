@@ -25,4 +25,8 @@ router.get("/locate", ({session: {SchoolID}}, res) => {
 router.get("/school/:id", (req, res) => {
   res.render("school",{id:req.params.id, data: req.query})
 })
+router.get("/book", ({}, res) => {
+  res.render("book", {})
+  
+})
 module.exports = router;

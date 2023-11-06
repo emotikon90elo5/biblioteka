@@ -1,6 +1,6 @@
 async function classes() {
   let clas = document.getElementById("classID");
-  const response = await fetch("http://localhost:4000/api/config/class", {
+  const response = await fetch("/api/config/class", {
     credentials: "include",
   });
   let jsona = await response.json();
