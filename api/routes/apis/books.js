@@ -150,7 +150,7 @@ router.get("/find/School/:id", async ({ params: { id }, query: { title, author, 
     })
   }
   catch (err) {
-    console.log(err)
+
     return res.json({ succes: false })
   }
   if (books == null) return res.json({ succes: false })

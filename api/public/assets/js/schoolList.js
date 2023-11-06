@@ -7,7 +7,7 @@ async function shelf() {
   let table = document.getElementById("table");
 
   await jsona.data.forEach((e) => {
-    console.log(e);
+  
     let tr = document.createElement("tr");
     let td1 = document.createElement("td");
     td1.innerText = e.name;

@@ -58,7 +58,7 @@ const getPupilID = (firstName, lastName, classID) => {
                 }
             })
         } catch (err) {
-            console.log(err)
+
             return res("dberr")
         }
         if (pupil == null) return res("pupilNotExist")
@@ -81,7 +81,7 @@ const getBookID = (schoolID, localID) => {
                 }
             })
         } catch (err) {
-            console.log(err)
+
             return res("dberr")
         }
         if (book == null) return res("bookNotExist")

@@ -26,7 +26,7 @@ router.get("/school", async ({}, res) => {
       
     });
   } catch (err) {
-    console.log(err);
+
     return res.json({ succes: false });
   }
   if (Schools == null) return res.json({ succes: false });
@@ -39,7 +39,7 @@ router.get("/books/:id", async ({params: { id }}, res) => {
       
     });
   } catch (err) {
-    console.log(err);
+
     return res.json({ succes: false });
   }
   if (Schools == null) return res.json({ succes: false });

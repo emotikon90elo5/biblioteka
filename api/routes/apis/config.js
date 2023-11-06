@@ -64,7 +64,7 @@ router.get("/shelf", async ({ session: { SchoolID } }, res) => {
       },
     });
   } catch (err) {
-    console.log(err);
+
     return res.json({ succes: false });
   }
   if (shelf == null) return res.json({ succes: false });
@@ -120,7 +120,7 @@ router.get("/pupils", async ({ session: { SchoolID } }, res) => {
       },
     });
   } catch (err) {
-    console.log(err);
+
     return res.json({ succes: false });
   }
   if (pupils == null) return res.json({ succes: false });
@@ -143,7 +143,7 @@ router.get(
         },
       });
     } catch (err) {
-      console.log(err);
+
       return res.json({ succes: false });
     }
     if (pupils == null) return res.json({ succes: false });
@@ -165,7 +165,7 @@ router.get(
         },
       });
     } catch (err) {
-      console.log(err);
+
       return res.json({ succes: false });
     }
     if (pupils == null) return res.json({ succes: false });
@@ -197,7 +197,7 @@ router.get(
         },
       });
     } catch (err) {
-      console.log(err);
+
       return res.json({ succes: false });
     }
     if (shelf == null) return res.json({ succes: false });
@@ -262,7 +262,7 @@ router.get(
         });
       }
     } catch (err) {
-      console.log(err);
+
       return res.json({ succes: false });
     }
     if (books == null) return res.json({ succes: false });

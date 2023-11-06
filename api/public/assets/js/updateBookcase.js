@@ -5,7 +5,7 @@ async function update() {
       credentials: "include",
     });
     let jsona = await response.json();
-    console.log(jsona);
+
     
     document.getElementById("headerName").innerText += ` ${jsona.data.name}`;
     
