@@ -29,6 +29,12 @@ async function shelf() {
       let td4 = document.createElement("td");
       td4.innerText = e.type.name;
       tr.append(td4);
+      let td5 = document.createElement("td");
+      td5.innerText = e.shelf.name;
+      tr.append(td5);
+      let td6 = document.createElement("td");
+      td6.innerText = e.shelf.bookcase.name;
+      tr.append(td6);
 
       table.append(tr);
     });

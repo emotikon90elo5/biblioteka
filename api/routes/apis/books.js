@@ -132,10 +132,20 @@ router.get("/find/School/:id", async ({ params: { id }, query: { title, author, 
           name:{
             contains:name?name:"",
           }
-        }
+        },
+        rents: {
+          none: {
+              rented:true,
+          },
+        },
       },
       include:{
-        type:true
+        type:true,
+        shelf:{
+          include:{bookcase:true}
+          
+        },
+        
       }
     })
   }

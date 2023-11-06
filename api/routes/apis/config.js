@@ -172,33 +172,101 @@ router.get(
     return res.json({ succes: true, data: pupils });
   }
 );
-router.get("/shelf/:id", async ({ session: { SchoolID },params: { id } }, res) => {
-  let shelf;
-  try {
-    shelf = await prisma.bookcases.findFirst({
-      where: {
-        id:Number(id.replace(notNumbers, "")),
-        schoolsId: SchoolID,
-      },
-      include: {
-        shelves: {
-          select: {
-            id: true,
-            name: true,
+router.get(
+  "/shelf/:id",
+  async ({ session: { SchoolID }, params: { id } }, res) => {
+    let shelf;
+    try {
+      shelf = await prisma.bookcases.findFirst({
+        where: {
+          id: Number(id.replace(notNumbers, "")),
+          schoolsId: SchoolID,
+        },
+        include: {
+          shelves: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          _count: {
+            select: {
+              shelves: true,
+            },
           },
         },
-        _count: {
-          select: {
-            shelves: true,
-          },
-        },
-      },
-    });
-  } catch (err) {
-    console.log(err);
-    return res.json({ succes: false });
+      });
+    } catch (err) {
+      console.log(err);
+      return res.json({ succes: false });
+    }
+    if (shelf == null) return res.json({ succes: false });
+    return res.json({ succes: true, data: shelf });
   }
-  if (shelf == null) return res.json({ succes: false });
-  return res.json({ succes: true, data: shelf });
-});
+);
+
+router.get(
+  "/find/rentedBooks/:id",
+  async ({ params: { id }, query: { title, bookId } }, res) => {
+    let school;
+
+    try {
+      if (bookId) {
+        books = await prisma.books.findMany({
+          where: {
+            shelf: {
+              bookcase: {
+                schoolsId: Number(id.replace(notNumbers, "")),
+              },
+            },
+            title: {
+              contains: title ? title : "",
+            },
+            localid:Number(bookId.replace(notNumbers, "")),
+            rents: {
+              some: {
+                rented: true,
+              },
+            },
+          },
+          include: {
+            type: true,
+            shelf: {
+              include: { bookcase: true },
+            },
+          },
+        });
+      } else {
+        books = await prisma.books.findMany({
+          where: {
+            shelf: {
+              bookcase: {
+                schoolsId: Number(id.replace(notNumbers, "")),
+              },
+            },
+            title: {
+              contains: title ? title : "",
+            },
+            rents: {
+              some: {
+                  rented:true,
+              },
+            },
+          },
+          include: {
+            type: true,
+            shelf: {
+              include: { bookcase: true },
+            },
+          },
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      return res.json({ succes: false });
+    }
+    if (books == null) return res.json({ succes: false });
+    res.json({ succes: true, data: books });
+  }
+);
 module.exports = router;
