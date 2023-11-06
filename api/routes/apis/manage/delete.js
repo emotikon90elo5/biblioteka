@@ -43,6 +43,14 @@ router.delete("/pupil", async ({ body, session: { SchoolID } }, res) => {
     res.json({ succes: true })
 })
 
+router.delete("/class", async ({ body, session: { SchoolID } }, res) => {
+    const { id } = body
+    if (isNotUndifined(body)) return res.json({ succes: false, message: "Bad request" });
+    const deleteClassValue = await deleteClass(Number(id.replace(notNumbers, "")), SchoolID)
+    if (deleteClassValue != true) return res.json({ succes: false, message: deleteClassValue });
+    res.json({ succes: true })
+})
+
 
 const deleteBook = (id, schoolsId) => {
     return new Promise(async (res) => {
@@ -152,6 +160,25 @@ const deletePupil = (id, schoolsId) => {
     })
 }
 
-
+const deleteClass = (id, schoolsId) => {
+    return new Promise(async (res) => {
+        try {
+            await prisma.class.delete({
+                where: {
+                    id: id,
+                    schoolsId: schoolsId
+                },
+            })
+        } catch (err) {
+            if (err instanceof PrismaClientKnownRequestError) {
+                if (err.code == 'P2003' && err.meta.field_name == 'classId') {
+                    return res("Nie możesz usunąć klasy w której są uczniowie!")
+                }
+            }
+            return res(errHanler(err))
+        }
+        return res(true)
+    })
+}
 
 module.exports = router;

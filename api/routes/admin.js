@@ -47,7 +47,7 @@ router.get("/updatePupil/:pupilId", (req, res) => {
     res.render("admin/updatePupil",{pupilId:req.params.pupilId, data: req.query})
 })
 router.get("/classList", (req, res) => {
-    res.render("admin/classList")
+    res.render("admin/classList", {data: req.query})
 })
 router.get("/bookcaseList", (req, res) => {
     res.render("admin/bookcaseList", {data: req.query})
