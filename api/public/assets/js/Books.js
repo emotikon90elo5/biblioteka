@@ -5,10 +5,14 @@ let popupText = document.getElementById("exampleModalLongTitleContent");
 async function shelf() {
   let table = document.getElementById("table");
 
-  const response = await fetch("/api/config/books", {
+  const response = await fetch(`/api/books/find/School/${id}?${title?`title=${title}`:""}&${author?`author=${author}`:""}&${publishinghouse?`publishinghouse=${publishinghouse}`:""}&${name?`name=${name}`:""}`, {
     credentials: "include",
   });
   let jsona = await response.json();
+  document.getElementById("author").value = author?author:""
+    document.getElementById("title").value = title?title:""
+    document.getElementById("publishinghouse").value = publishinghouse?publishinghouse:""
+    document.getElementById("type").value = name?name:""
   await jsona.data.forEach((e) => {
     let tr = document.createElement("tr");
 

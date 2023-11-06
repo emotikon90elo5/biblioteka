@@ -8,6 +8,47 @@
   <link rel="shortcut icon" type="image/png" href="/imgs/logo.png" />
   <link rel="stylesheet" href="/assets/css/styles.min.css" />
   <script src="/assets/js/Books.js" defer></script>
+  <% if (typeof id !='undefined' ) { %>
+    <script>
+      const id = <%=id%>
+    </script>
+    <% } else{%>
+    <script>
+      const id = -1;
+    </script>
+    <%}%> <% if (typeof data.title !='undefined' ) { %>
+    <script>
+      const title = "<%=data.title%>";
+    </script>
+    <% } else{%>
+    <script>
+      const title = "";
+    </script>
+    <%}%> <% if (typeof data.author !='undefined' ) { %>
+    <script>
+      const author = "<%=data.author%>";
+    </script>
+    <% } else{%>
+    <script>
+      const author = "";
+    </script>
+    <%}%> <% if (typeof data.publishinghouse !='undefined' ) { %>
+    <script>
+      const publishinghouse = "<%=data.publishinghouse%>";
+    </script>
+    <% } else{%>
+    <script>
+      const publishinghouse = "";
+    </script>
+    <%}%> <% if (typeof data.name !='undefined' ) { %>
+    <script>
+      const name = "<%=data.name%>";
+    </script>
+    <% } else{%>
+    <script>
+      const name = "";
+    </script>
+    <%}%>
 </head>
 
 <body>
@@ -75,6 +116,27 @@
               </div>
             </div>
             <div class="card-body">
+              <div class="card">
+                <div class="card-body">
+              <form >
+                <div class="row mb-2">
+                  <div class="col">
+                    <input type="text"name="title" id="title" class="form-control" placeholder="Tytuł">
+                  </div>
+                  <div class="col">
+                    <input type="text" name="author" id="author" class="form-control" placeholder="Autor">
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <div class="col">
+                    <input type="text" name="publishinghouse" id="publishinghouse" class="form-control" placeholder="Wydawnictwo">
+                  </div>
+                  <div class="col">
+                    <input type="text" name="name" id="type" class="form-control" placeholder="Gatunek">
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Szukaj!</button>
+              </form></div></div>
               <h5 class="card-title fw-semibold mb-4">wybierz książkę</h5>
               <div class="card">
 

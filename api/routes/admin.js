@@ -31,7 +31,7 @@ router.get("/book", (req, res) => {
     res.redirect("/admin/book/1")
 })
 router.get("/book/:page", (req, res) => {
-    res.render("admin/bookList",{page:req.params.page})
+    res.render("admin/bookList",{page:req.params.page, data: req.query})
 })
 
 router.get("/updateBook/:id", (req, res) => {
@@ -41,7 +41,7 @@ router.get("/pupilList", (req, res) => {
     res.redirect("/admin/classlist")
 })
 router.get("/pupilList/:id", (req, res) => {
-    res.render("admin/pupilList",{id:req.params.id})
+    res.render("admin/pupilList",{id:req.params.id, data: req.query})
 })
 router.get("/updatePupil/:pupilId", (req, res) => {
     res.render("admin/updatePupil",{pupilId:req.params.pupilId, data: req.query})
