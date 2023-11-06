@@ -1,7 +1,7 @@
 async function update() {
     let table = document.getElementById("table");
     let popupText = document.getElementById("exampleModalLongTitleContent");
-    const response = await fetch(`http://localhost:4000/api/books/shelf/${shelfId}`, {
+    const response = await fetch(`/api/books/shelf/${shelfId}`, {
       credentials: "include",
     });
     let jsona = await response.json();

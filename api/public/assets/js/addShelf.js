@@ -1,6 +1,6 @@
 async function bookcase() {
     let bookcase = document.getElementById("bookcase");
-    const response = await fetch("http://localhost:4000/api/config/bookcase", {
+    const response = await fetch("/api/config/bookcase", {
       credentials: "include",
     });
     let jsona = await response.json();

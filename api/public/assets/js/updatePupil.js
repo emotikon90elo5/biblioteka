@@ -1,6 +1,6 @@
 async function update() {
     let table = document.getElementById("table");
-    const response = await fetch(`http://localhost:4000/api/config/pupils/${pupilId}`, {
+    const response = await fetch(`/api/config/pupils/${pupilId}`, {
       credentials: "include",
     });
     let jsona = await response.json();

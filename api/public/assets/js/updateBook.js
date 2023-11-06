@@ -3,7 +3,7 @@ let selectedtype;
 async function update() {
   let table = document.getElementById("table");
   let popupText = document.getElementById("exampleModalLongTitleContent");
-  const response = await fetch(`http://localhost:4000/api/books/book/${id}`, {
+  const response = await fetch(`/api/books/book/${id}`, {
     credentials: "include",
   });
   let jsona = await response.json();
@@ -20,7 +20,7 @@ async function update() {
 }
 async function type() {
   let type = document.getElementById("type");
-  const response = await fetch("http://localhost:4000/api/config/types", {
+  const response = await fetch("/api/config/types", {
     credentials: "include",
   });
   let jsona = await response.json();
@@ -40,7 +40,7 @@ async function type() {
 
 async function shelf() {
   let shelf = document.getElementById("shelf");
-  const response = await fetch("http://localhost:4000/api/config/shelf", {
+  const response = await fetch("/api/config/shelf", {
     credentials: "include",
   });
   let jsona = await response.json();

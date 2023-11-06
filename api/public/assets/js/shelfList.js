@@ -5,7 +5,7 @@ let popupText = document.getElementById("exampleModalLongTitleContent");
 async function shelf() {
   let table = document.getElementById("table");
   
-  const response = await fetch(`http://localhost:4000/api/config/shelf`, {
+  const response = await fetch(`/api/config/shelf`, {
     credentials: "include",
   });
   let jsona = await response.json();
@@ -63,7 +63,7 @@ PopupCancel.addEventListener("click", () => {
 });
  PopupCommit.addEventListener("click", async() => {
   $("#exampleModalCenter").modal("hide");
-  const response = await fetch(`http://localhost:4000/api/manage/delete/bookcase`, {
+  const response = await fetch(`/api/manage/delete/bookcase`, {
     credentials: "include",
     method: "delete",
     headers: {
