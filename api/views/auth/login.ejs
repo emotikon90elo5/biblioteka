@@ -31,7 +31,6 @@
             id="password"
           />
         </div>
-        <span class="text-medium" style="color: red"><%= error %></span>
         <input class="text-big" type="submit" value="Zaloguj!" />
       </form>
     </div>
@@ -60,9 +59,9 @@
           <div class="col-md-8 col-lg-6 col-xxl-3">
             <div class="card mb-0">
               <div class="card-body">
-                <% if (typeof error !="undefined" ) { %>
+                <% if (typeof data.error !="undefined") { %>
                     <div class="alert alert-danger" role="alert">
-                      <%=error%>
+                      <%=data.error%>
                     </div>
                     <% } %>
                 <a href="/" class="text-nowrap logo-img text-center d-block py-3 w-100">
