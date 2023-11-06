@@ -13,7 +13,7 @@ const notNumbers = /\D/g
 router.post("/book", async ({ body }, res) => {
     const { title, author, publishingHouse, ageCategory, type, shelf, localID } = body
     if (isNotUndifined(body)) return redirectWithText(res, 'Nie podałeś pełnych danych', getOldValue(Object.assign(body, { messagetype: "err" })), "addbook");
-    if (isRented(localID) != 'bookNotExist') return returnredirectWithText(res, 'Książka o podanym kodzie już istnieje', getOldValue(Object.assign(body, { messagetype: "err" })), "addbook");
+    if (await isRented(localID) != 'bookNotExist') return redirectWithText(res, 'Książka o podanym kodzie już istnieje', getOldValue(Object.assign(body, { messagetype: "err" })), "addbook");
     const addBookValue = await addBook(title.replace(specialChars, ""), author.replace(specialChars, ""), publishingHouse.replace(specialChars, ""), Number(ageCategory.replace(notNumbers, "")), Number(type.replace(notNumbers, "")), Number(shelf.replace(notNumbers, "")), Number(localID.replace(notNumbers, "")))
     if (addBookValue != true) return redirectWithText(res, addBookValue, getOldValue(Object.assign(body, { messagetype: "err" })), "addbook");
     redirectWithText(res, "Pomyślnie dodano książkę", getOldValue({ messagetype: "success" }), "addbook")

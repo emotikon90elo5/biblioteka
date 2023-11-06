@@ -1,13 +1,38 @@
-$(function () {
-
-
-  // =====================================
-  // Profit
-  // =====================================
+const getDays = (numberOfDays) => {
+  let data = new Date()
+  let days = []
+  days.push(data.getDate() + "/" + (data.getMonth() + 1))
+  for (let i = 0; i < numberOfDays - 1; i++) {
+    data.setDate(data.getDate() - 1)
+    days.push(data.getDate() + "/" + (data.getMonth() + 1))
+  }
+  return days
+}
+const renderChart = async () => {
+  let days = getDays(14).reverse()
+  const response = await fetch(`/api/homepage/lastdays`, {
+  });
+  let data = []
+  let i = 0;
+  let jsona = await response.json();
+  let addvalue
+  await days.forEach((day) => {
+    if (jsona.data[i]) {
+      addvalue = jsona.data[i].day
+    } else {
+      addvalue = '00'
+    }
+    if (day.startsWith(addvalue + "/")) {
+      data.push(jsona.data[i].count)
+      i++
+    } else {
+      console.log(data)
+      data.push(0)
+    }
+  })
   var chart = {
     series: [
-      { name: "Earnings this month:", data: [355, 390, 300, 350, 390, 180, 355, 390] },
-      { name: "Expense this month:", data: [280, 250, 325, 215, 250, 310, 280, 250] },
+      { name: "Wyporzyczenia:", data: data },
     ],
 
     chart: {
@@ -20,8 +45,7 @@ $(function () {
       sparkline: { enabled: false },
     },
 
-
-    colors: ["#5D87FF", "#49BEFF"],
+    colors: ["#5D87FF"],
 
 
     plotOptions: {
@@ -57,7 +81,7 @@ $(function () {
 
     xaxis: {
       type: "category",
-      categories: ["16/08", "17/08", "18/08", "19/08", "20/08", "21/08", "22/08", "23/08"],
+      categories: getDays(14).reverse(),
       labels: {
         style: { cssClass: "grey--text lighten-2--text fill-color" },
       },
@@ -67,7 +91,7 @@ $(function () {
     yaxis: {
       show: true,
       min: 0,
-      max: 400,
+      max: 50,
       tickAmount: 4,
       labels: {
         style: {
@@ -103,6 +127,13 @@ $(function () {
 
   var chart = new ApexCharts(document.querySelector("#chart"), chart);
   chart.render();
+}
+
+$(function () {
+  // =====================================
+  // Profit
+  // =====================================
+
 
 
   // =====================================
@@ -209,3 +240,4 @@ $(function () {
   };
   new ApexCharts(document.querySelector("#earning"), earning).render();
 })
+renderChart()

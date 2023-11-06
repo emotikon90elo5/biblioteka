@@ -26,7 +26,6 @@ const isRented = (localID, schoolID) => {
                 }
             })
         } catch (err) {
-            console.log(err)
             return res("dberr")
         }
         if (renteds == null) return res("bookNotExist")

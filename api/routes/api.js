@@ -4,6 +4,7 @@ var BooksRouter = require("./apis/books")
 var AuthRouter = require("./apis/auth")
 var ConfigRouter = require("./apis/config")
 var ManageRouter = require("./apis/manage")
+var HomePageRouter = require("./apis/homepage")
 const { PrismaClient, Prisma } = require("@prisma/client");
 const prisma = new PrismaClient();
 
@@ -16,6 +17,7 @@ router.use("/config", (req, res, next)=>{
   next()
 }, ConfigRouter);
 router.use("/manage", ManageRouter.router);
+router.use("/homepage", HomePageRouter);
 
 router.get("/school", async ({}, res) => {
   let Schools;
