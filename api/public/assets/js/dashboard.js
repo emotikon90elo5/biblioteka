@@ -1,3 +1,6 @@
+let monthRents = document.getElementById('monthRents')
+let monthPercent = document.getElementById('monthPercent')
+let monthIco = document.getElementById('monthIco')
 const getDays = (numberOfDays) => {
   let data = new Date()
   let days = []
@@ -8,6 +11,7 @@ const getDays = (numberOfDays) => {
   }
   return days
 }
+
 const renderChart = async () => {
   let days = getDays(14).reverse()
   const response = await fetch(`/api/homepage/lastdays`, {
@@ -16,6 +20,18 @@ const renderChart = async () => {
   let i = 0;
   let jsona = await response.json();
   let addvalue
+  let percent = (jsona.thismon[0].count/jsona.lastmon[0].count*100)-100
+  monthRents.innerText = jsona.thismon[0].count
+  monthPercent.innerText = Math.round(percent) + "%"
+  
+  if(percent < 0){
+    monthIco.classList.add('ti-arrow-down-right')
+    monthIco.classList.add('text-danger')
+  }else{
+    monthIco.classList.add('ti-arrow-up-left')
+    monthIco.classList.add('text-success')
+  }
+  console.log(percent);
   await days.forEach((day) => {
     if (jsona.data[i]) {
       addvalue = jsona.data[i].day
@@ -26,7 +42,7 @@ const renderChart = async () => {
       data.push(jsona.data[i].count)
       i++
     } else {
-      console.log(data)
+
       data.push(0)
     }
   })
@@ -192,52 +208,52 @@ const renderChart = async () => {
 
 
 
-  // =====================================
-  // Earning
-  // =====================================
-  // var earning = {
-  //   chart: {
-  //     id: "sparkline3",
-  //     type: "area",
-  //     height: 60,
-  //     sparkline: {
-  //       enabled: true,
-  //     },
-  //     group: "sparklines",
-  //     fontFamily: "Plus Jakarta Sans', sans-serif",
-  //     foreColor: "#adb0bb",
-  //   },
-  //   series: [
-  //     {
-  //       name: "Earnings",
-  //       color: "#49BEFF",
-  //       data: [25, 66, 20, 40, 12, 58, 20],
-  //     },
-  //   ],
-  //   stroke: {
-  //     curve: "smooth",
-  //     width: 2,
-  //   },
-  //   fill: {
-  //     colors: ["#f3feff"],
-  //     type: "solid",
-  //     opacity: 0.05,
-  //   },
+// =====================================
+// Earning
+// =====================================
+// var earning = {
+//   chart: {
+//     id: "sparkline3",
+//     type: "area",
+//     height: 60,
+//     sparkline: {
+//       enabled: true,
+//     },
+//     group: "sparklines",
+//     fontFamily: "Plus Jakarta Sans', sans-serif",
+//     foreColor: "#adb0bb",
+//   },
+//   series: [
+//     {
+//       name: "Earnings",
+//       color: "#49BEFF",
+//       data: [25, 66, 20, 40, 12, 58, 20],
+//     },
+//   ],
+//   stroke: {
+//     curve: "smooth",
+//     width: 2,
+//   },
+//   fill: {
+//     colors: ["#f3feff"],
+//     type: "solid",
+//     opacity: 0.05,
+//   },
 
-  //   markers: {
-  //     size: 0,
-  //   },
-  //   tooltip: {
-  //     theme: "dark",
-  //     fixed: {
-  //       enabled: true,
-  //       position: "right",
-  //     },
-  //     x: {
-  //       show: false,
-  //     },
-  //   },
-  // };
-  // new ApexCharts(document.querySelector("#earning"), earning).render();
+//   markers: {
+//     size: 0,
+//   },
+//   tooltip: {
+//     theme: "dark",
+//     fixed: {
+//       enabled: true,
+//       position: "right",
+//     },
+//     x: {
+//       show: false,
+//     },
+//   },
+// };
+// new ApexCharts(document.querySelector("#earning"), earning).render();
 // })
 renderChart()
