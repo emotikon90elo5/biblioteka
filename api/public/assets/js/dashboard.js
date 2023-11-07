@@ -20,14 +20,21 @@ const renderChart = async () => {
   let i = 0;
   let jsona = await response.json();
   let addvalue
-  let percent = (jsona.thismon[0].count/jsona.lastmon[0].count*100)-100
-  monthRents.innerText = jsona.thismon[0].count
+  let lastMonth = jsona.lastmon[0].count
+  let thisMonth = jsona.thismon[0].count
+  let percent
+  if(lastMonth==0){
+     percent = 0
+  }else{
+   percent = (thisMonth / lastMonth *100)-100 
+  }
+  monthRents.innerText = thisMonth
   monthPercent.innerText = Math.round(percent) + "%"
-  
-  if(percent < 0){
+
+  if (percent < 0) {
     monthIco.classList.add('ti-arrow-down-right')
     monthIco.classList.add('text-danger')
-  }else{
+  } else {
     monthIco.classList.add('ti-arrow-up-left')
     monthIco.classList.add('text-success')
   }
