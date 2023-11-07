@@ -62,7 +62,7 @@
                 <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
                   <div class="mb-3 mb-sm-0">
                     <h5 class="card-title fw-semibold">
-                      Wypożyczenia w tym miesiącu
+                      Wyporzyczenia w tym miesiącu
                     </h5>
                   </div>
                 </div>
@@ -77,17 +77,17 @@
                 <div class="card overflow-hidden">
                   <div class="card-body p-4">
                     <h5 class="card-title mb-9 fw-semibold">
-                      Roczne Wypożyczenia
+                      Roczne Wyporzyczenia
                     </h5>
                     <div class="row align-items-center">
                       <div class="col-8">
-                        <h4 class="fw-semibold mb-3">10000</h4>
+                        <h4 class="fw-semibold mb-3"id="yearRents">0</h4>
                         <div class="d-flex align-items-center mb-3">
                           <span
-                            class="me-1 rounded-circle bg-light-success round-20 d-flex align-items-center justify-content-center">
-                            <i class="ti ti-arrow-up-left text-success"></i>
+                            class="me-1 rounded-circle round-20 d-flex bg-light-info align-items-center justify-content-center">
+                            <i class="ti" id="yearIco"></i>
                           </span>
-                          <p class="text-dark me-1 fs-3 mb-0">+0%</p>
+                          <p class="text-dark me-1 fs-3 mb-0" id="yearPercent">0%</p>
                           <p class="fs-3 mb-0">Poprzedni rok</p>
                         </div>
                       </div>
@@ -105,11 +105,11 @@
                       <h5 class="card-title mb-9 fw-semibold">
                         Miesięczne Wyporzyczenia
                       </h5>
-                      <h4 class="fw-semibold mb-3" id="monthRents">1000</h4>
+                      <h4 class="fw-semibold mb-3" id="monthRents">0</h4>
                       <div class="d-flex align-items-center pb-1">
                         <span
-                          class="me-2 rounded-circle bg-light-danger round-20 d-flex align-items-center justify-content-center">
-                          <i class="ti ti-arrow-down-right text-danger" id="monthIco"></i>
+                          class="me-1 rounded-circle bg-light-info round-20 d-flex align-items-center justify-content-center">
+                          <i class="ti" id="monthIco"></i>
                         </span>
                         <p class="text-dark me-1 fs-3 mb-0" id="monthPercent">0%</p>
                         <p class="fs-3 mb-0">Poprzedni miesiąc</p>

@@ -1,6 +1,9 @@
 let monthRents = document.getElementById('monthRents')
 let monthPercent = document.getElementById('monthPercent')
 let monthIco = document.getElementById('monthIco')
+let yearRents = document.getElementById('yearRents')
+let yearPercent = document.getElementById('yearPercent')
+let yearIco = document.getElementById('yearIco')
 const getDays = (numberOfDays) => {
   let data = new Date()
   let days = []
@@ -22,23 +25,42 @@ const renderChart = async () => {
   let addvalue
   let lastMonth = jsona.lastmon[0].count
   let thisMonth = jsona.thismon[0].count
-  let percent
-  if(lastMonth==0){
-     percent = 0
-  }else{
-   percent = (thisMonth / lastMonth *100)-100 
+  let lastYear = jsona.lastyear[0].count
+  let thisYear = jsona.thisyear[0].count
+  let percentMonth, percentYear
+  if (lastYear == 0) {
+    percentYear = 0
+  } else {
+    percentYear = (thisYear / lastYear * 100) - 100
+  }
+  
+  if (lastMonth == 0) {
+    percentMonth = 0
+  } else {
+    percentMonth = (thisMonth / lastMonth * 100) - 100
   }
   monthRents.innerText = thisMonth
-  monthPercent.innerText = Math.round(percent) + "%"
+  monthPercent.innerText = Math.round(percentMonth) + "%"
 
-  if (percent < 0) {
+  if (percentMonth < 0) {
     monthIco.classList.add('ti-arrow-down-right')
     monthIco.classList.add('text-danger')
   } else {
     monthIco.classList.add('ti-arrow-up-left')
     monthIco.classList.add('text-success')
   }
-  console.log(percent);
+
+  yearRents.innerText = thisYear
+  yearPercent.innerText = Math.round(percentYear) + "%"
+
+  if (percentYear < 0) {
+    yearIco.classList.add('ti-arrow-down-right')
+    yearIco.classList.add('text-danger')
+  } else {
+    yearIco.classList.add('ti-arrow-up-left')
+    yearIco.classList.add('text-success')
+  }
+
   await days.forEach((day) => {
     if (jsona.data[i]) {
       addvalue = jsona.data[i].day
