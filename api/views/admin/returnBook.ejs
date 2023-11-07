@@ -67,17 +67,27 @@
         <div class="container-fluid">
           <div class="card">
             <div class="card-body">
+              <% if (typeof data.message !="undefined" && typeof data.messagetype !="undefined" ) { %>
+                <% if (data.messagetype=="err" ) { %>
+                  <div class="alert alert-danger" role="alert">
+                    <%=data.message%>
+                  </div>
+                  <% } else {%>
+                    <div class="alert alert-success" role="alert">
+                      <%=data.message%>
+                    </div>
+                    <% }} %>
               <h5 id="bookName" class="card-title fw-semibold mb-4">Zwróć książkę</h5>
               <div class="card">
                 <div class="card-body">
 
-                  <form action="/api/manage/add/pupil" method="post">
+                  <form action="/api/manage/unrent" method="post">
                     <div class="mb-3">
                       <label for="bookcase" class="form-label">Lokalizacja</label>
                       <select id="bookcase" name="bookcase" class="form-control">
                       </select> 
                     </div>
-                    
+                    <input type="hidden" name="id" value="<%=id%>">
                     <button type="submit" class="btn btn-primary">Zwróć!</button>
                   </form>
                 </div>

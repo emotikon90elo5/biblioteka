@@ -70,6 +70,27 @@ router.post("/rent", (req, res, next) => {
   return redirectWithText(res, 'Pomyślnie wyporzyczono', getOldValue({ messagetype: "success" }), "rent");
 })
 
+router.post("/unrent", (req, res, next) => {
+  if (!req.session.SchoolID) return res.json({ succes: false, auth: false })
+  next()
+}, async ({ session: { SchoolID }, body }, res) => {
+  const { bookcase, id} = body;
+  let message="Błąd";
+
+  if (isNotUndifined(body)) return redirectWithText(res, 'Nie podałeś pełnych danych', getOldValue(Object.assign({ messagetype: "err" })), "returnBook/"+id);
+
+  let unrentValue = await unrent(id.replace(notNumbers, ""), Number(bookcase.replace(specialChars, "")), SchoolID)
+
+  switch (unrentValue) {
+    case "dberr":
+      message = "Błąd połączenia, spróbuj ponownie później";
+      break;
+  }
+  if (unrentValue != true) return redirectWithText(res, message, getOldValue(Object.assign({ messagetype: "err" })), "returnBook/"+id);
+
+  return redirectWithText(res, 'Pomyślnie Oddano', getOldValue({ messagetype: "success" }), "booksreturn");
+})
+
 //rent
 const rent = async (localID, firstName, lastName, classID, schoolID) => {
   return new Promise(async (res) => {
@@ -84,6 +105,42 @@ const rent = async (localID, firstName, lastName, classID, schoolID) => {
       return res("dberr")
     }
     if (create != null) res(true)
+    else res("dberr")
+  })
+}
+
+const unrent = async (id, shelfID, schoolId)=>{
+  return new Promise(async (res) => {
+    let unrent = null;
+    let book = null;
+    try {
+      unrent = await prisma.rents.updateMany({
+        where:{
+          booksId:Number(id),
+          rented: true,
+          pupils:{
+            class:{
+              schoolsId: schoolId
+            }
+          }
+        }, 
+        data:{
+          rented: false,
+        }
+      });
+      book = await prisma.books.updateMany({
+        where:{
+         id:Number(id)
+        }, 
+        data:{
+          shelvesId: Number(shelfID)
+        }
+      })
+    } catch (err) {
+      console.log(err)
+      return res("dberr")
+    }
+    if (unrent != null && book != null) res(true)
     else res("dberr")
   })
 }
